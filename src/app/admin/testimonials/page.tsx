@@ -34,10 +34,6 @@ export default function TestimonialsAdminPage() {
     image_url: ''
   });
 
-  useEffect(() => {
-    fetchTestimonials();
-  }, []);
-
   async function fetchTestimonials() {
     setLoading(true);
     const { data, error } = await supabase.from('testimonials').select('*').order('created_at', { ascending: false });
@@ -45,6 +41,10 @@ export default function TestimonialsAdminPage() {
     else setTestimonials(data || []);
     setLoading(false);
   }
+
+  useEffect(() => {
+    fetchTestimonials();
+  }, []);
 
   const handleOpenModal = (t?: Testimonial) => {
     if (t) {
@@ -106,7 +106,7 @@ export default function TestimonialsAdminPage() {
                  <button onClick={() => handleDelete(t.id)} className="p-2 bg-off-white text-wine rounded-xl hover:bg-wine hover:text-white"><Trash2 size={16} /></button>
               </div>
               <div className="text-gold mb-4"><Quote size={32} /></div>
-              <p className="text-sm text-gray-500 italic mb-6 line-clamp-4 flex-grow">"{t.text}"</p>
+              <p className="text-sm text-gray-500 italic mb-6 line-clamp-4 flex-grow">&quot;{t.text}&quot;</p>
               <div className="flex items-center gap-4">
                  <img src={t.image_url} className="w-10 h-10 rounded-full object-cover" alt={t.name} />
                  <h4 className="font-bold text-navy">{t.name}</h4>

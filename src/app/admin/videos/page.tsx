@@ -38,10 +38,6 @@ export default function VideosAdminPage() {
     category: 'Teaching'
   });
 
-  useEffect(() => {
-    fetchVideos();
-  }, []);
-
   async function fetchVideos() {
     setLoading(true);
     const { data, error } = await supabase
@@ -56,6 +52,10 @@ export default function VideosAdminPage() {
     }
     setLoading(false);
   }
+
+  useEffect(() => {
+    fetchVideos();
+  }, []);
 
   const handleOpenModal = (video?: VOD) => {
     if (video) {

@@ -31,18 +31,19 @@ export default function SettingsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    async function fetchContent() {
-      const { data, error } = await supabase.from('site_content').select('*');
-      if (data && !error) {
-        const contentMap: Record<string, string> = {};
-        data.forEach((item: SiteContent) => {
-          contentMap[item.id] = item.content;
-        });
-        setContents(prev => ({ ...prev, ...contentMap }));
-      }
-      setLoading(false);
+  async function fetchContent() {
+    const { data, error } = await supabase.from('site_content').select('*');
+    if (data && !error) {
+      const contentMap: Record<string, string> = {};
+      data.forEach((item: SiteContent) => {
+        contentMap[item.id] = item.content;
+      });
+      setContents(prev => ({ ...prev, ...contentMap }));
     }
+    setLoading(false);
+  }
+
+  useEffect(() => {
     fetchContent();
   }, []);
 

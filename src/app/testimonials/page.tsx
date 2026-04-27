@@ -34,7 +34,7 @@ export default function TestimonialsPage() {
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl md:text-6xl font-poppins font-bold text-white mb-6"
           >
-            Glorious Testimonies
+            Testemunhos Gloriosos
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
@@ -42,7 +42,7 @@ export default function TestimonialsPage() {
             transition={{ delay: 0.1 }}
             className="text-gray-400 max-w-2xl mx-auto"
           >
-            "And they overcame him by the blood of the Lamb, and by the word of their testimony..." - Revelation 12:11
+            &quot;E eles o venceram pelo sangue do Cordeiro e pela palavra do seu testemunho...&quot; - Apocalipse 12:11
           </motion.p>
         </div>
       </section>
@@ -69,7 +69,7 @@ export default function TestimonialsPage() {
               </div>
 
               <p className="text-gray-600 italic leading-relaxed mb-10 flex-grow">
-                "{t.text}"
+                &quot;{t.text}&quot;
               </p>
 
               <div className="flex items-center gap-4 pt-6 border-t border-gray-50">
@@ -101,13 +101,13 @@ export default function TestimonialsPage() {
           <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/5 rounded-full blur-3xl" />
           <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-gold/10 rounded-full blur-3xl" />
           
-          <h3 className="text-3xl font-poppins font-bold mb-4 relative z-10">Do You Have a Testimony?</h3>
+          <h3 className="text-3xl font-poppins font-bold mb-4 relative z-10">Tem um Testemunho?</h3>
           <p className="text-white/70 max-w-xl mx-auto mb-8 relative z-10">
-            Share your story and inspire others with what God has done in your life. 
-            Your testimony could be the key to someone else's breakthrough!
+            Partilhe a sua história e inspire outros com o que Deus tem feito na sua vida. 
+            O seu testemunho pode ser a chave para o avanço de outra pessoa!
           </p>
           <button className="bg-gold text-navy px-12 py-4 rounded-full font-bold hover:bg-white transition-all relative z-10">
-            Submit Your Testimony
+            Enviar Testemunho
           </button>
         </motion.div>
       </div>

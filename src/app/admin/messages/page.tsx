@@ -32,10 +32,6 @@ export default function MessagesAdminPage() {
   const [loading, setLoading] = useState(true);
   const [selectedMsg, setSelectedMsg] = useState<Message | null>(null);
 
-  useEffect(() => {
-    fetchMessages();
-  }, []);
-
   async function fetchMessages() {
     setLoading(true);
     const { data, error } = await supabase
@@ -50,6 +46,10 @@ export default function MessagesAdminPage() {
     }
     setLoading(false);
   }
+
+  useEffect(() => {
+    fetchMessages();
+  }, []);
 
   async function toggleReadStatus(id: string, currentStatus: boolean) {
     const { error } = await supabase
@@ -218,7 +218,7 @@ export default function MessagesAdminPage() {
                     <div className="prose prose-navy max-w-none">
                        <h4 className="text-xs font-bold text-gray-300 uppercase tracking-widest mb-6 border-l-2 border-wine pl-4">Conteúdo da Mensagem</h4>
                        <p className="text-gray-600 text-lg leading-relaxed bg-off-white p-8 rounded-3xl border border-gray-100 whitespace-pre-wrap italic">
-                          "{selectedMsg.message}"
+                          &quot;{selectedMsg.message}&quot;
                        </p>
                     </div>
                     

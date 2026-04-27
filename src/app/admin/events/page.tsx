@@ -41,10 +41,6 @@ export default function EventsAdminPage() {
     image_url: ''
   });
 
-  useEffect(() => {
-    fetchEvents();
-  }, []);
-
   async function fetchEvents() {
     setLoading(true);
     const { data, error } = await supabase
@@ -60,6 +56,10 @@ export default function EventsAdminPage() {
     }
     setLoading(false);
   }
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
 
   const handleOpenModal = (event?: ChurchEvent) => {
     if (event) {

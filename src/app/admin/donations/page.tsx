@@ -31,10 +31,6 @@ export default function DonationsAdminPage() {
     count: 0
   });
 
-  useEffect(() => {
-    fetchDonations();
-  }, []);
-
   async function fetchDonations() {
     setLoading(true);
     const { data, error } = await supabase
@@ -54,6 +50,10 @@ export default function DonationsAdminPage() {
     }
     setLoading(false);
   }
+
+  useEffect(() => {
+    fetchDonations();
+  }, []);
 
   return (
     <div className="space-y-12">

@@ -31,7 +31,7 @@ export default function Home() {
                 className="relative z-10 rounded-3xl shadow-2xl w-full object-cover aspect-[4/5]"
               />
               <div className="absolute -bottom-6 -right-6 bg-wine text-white p-8 rounded-2xl shadow-xl z-20 hidden md:block">
-                <p className="font-poppins font-bold text-xl italic">"Dando um sentido à sua vida"</p>
+                <p className="font-poppins font-bold text-xl italic">&quot;Dando um sentido à sua vida&quot;</p>
               </div>
             </motion.div>
             

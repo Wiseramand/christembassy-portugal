@@ -25,8 +25,8 @@ export default function GivePage() {
     // Mock Stripe flow
     await new Promise(r => setTimeout(r, 2000));
     setLoading(false);
-    toast.success("Thank you for your generous donation!", {
-      description: "A confirmation receipt has been sent to your email.",
+    toast.success("Obrigado pela sua doação generosa!", {
+      description: "Um recibo de confirmação foi enviado para o seu email.",
     });
     setStep(3);
   };
@@ -51,7 +51,7 @@ export default function GivePage() {
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl md:text-6xl font-poppins font-bold mb-6"
           >
-            Sow into the Gospel
+            Semeie no Evangelho
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
@@ -59,7 +59,7 @@ export default function GivePage() {
             transition={{ delay: 0.1 }}
             className="text-white/70 max-w-2xl mx-auto text-lg"
           >
-            "Every man according as he purposeth in his heart, so let him give; not grudgingly, or of necessity: for God loveth a cheerful giver." - 2 Corinthians 9:7
+            &quot;Cada um dê conforme determinou em seu coração, não com pesar ou por necessidade, pois Deus ama quem dá com alegria.&quot; - 2 Coríntios 9:7
           </motion.p>
         </div>
       </section>
@@ -89,8 +89,8 @@ export default function GivePage() {
                     className="space-y-8"
                   >
                     <div className="text-center">
-                      <h2 className="text-2xl font-poppins font-bold text-navy mb-2">Select Amount</h2>
-                      <p className="text-gray-500">Choose how much you want to donate today.</p>
+                      <h2 className="text-2xl font-poppins font-bold text-navy mb-2">Selecione o Valor</h2>
+                      <p className="text-gray-500">Escolha quanto deseja doar hoje.</p>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
@@ -110,7 +110,7 @@ export default function GivePage() {
                     </div>
 
                     <div className="space-y-4">
-                      <label className="text-sm font-bold text-navy uppercase tracking-widest block">Or enter custom amount</label>
+                      <label className="text-sm font-bold text-navy uppercase tracking-widest block">Ou introduza um valor personalizado</label>
                       <div className="relative">
                          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-bold text-gray-400">€</span>
                          <input 
@@ -128,7 +128,7 @@ export default function GivePage() {
                       disabled={!finalAmount || finalAmount <= 0}
                       className="w-full bg-wine text-white py-5 rounded-2xl font-bold text-lg hover:bg-wine/90 transition-all flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      Continue
+                      Continuar
                       <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
                     </button>
                   </motion.div>
@@ -143,17 +143,17 @@ export default function GivePage() {
                     className="space-y-8"
                   >
                     <div className="text-center">
-                      <h2 className="text-2xl font-poppins font-bold text-navy mb-2">Details & Payment</h2>
-                      <p className="text-gray-500">You are giving <span className="font-bold text-wine">€{finalAmount}</span></p>
+                      <h2 className="text-2xl font-poppins font-bold text-navy mb-2">Detalhes e Pagamento</h2>
+                      <p className="text-gray-500">Está a doar <span className="font-bold text-wine">€{finalAmount}</span></p>
                     </div>
 
                     <form onSubmit={handleGive} className="space-y-6">
                       <div className="space-y-4">
-                        <label className="text-sm font-bold text-navy uppercase tracking-widest block">Full Name</label>
+                        <label className="text-sm font-bold text-navy uppercase tracking-widest block">Nome Completo</label>
                         <input 
                           required
                           type="text" 
-                          placeholder="John Doe"
+                          placeholder="João Silva"
                           value={form.name}
                           onChange={(e) => setForm({...form, name: e.target.value})}
                           className="w-full bg-off-white p-4 rounded-xl outline-none focus:ring-2 focus:ring-gold/20"
@@ -161,11 +161,11 @@ export default function GivePage() {
                       </div>
 
                       <div className="space-y-4">
-                        <label className="text-sm font-bold text-navy uppercase tracking-widest block">Email Address</label>
+                        <label className="text-sm font-bold text-navy uppercase tracking-widest block">Endereço de Email</label>
                         <input 
                           required
                           type="email" 
-                          placeholder="john@example.com"
+                          placeholder="joao@exemplo.com"
                           value={form.email}
                           onChange={(e) => setForm({...form, email: e.target.value})}
                           className="w-full bg-off-white p-4 rounded-xl outline-none focus:ring-2 focus:ring-gold/20"
@@ -174,12 +174,12 @@ export default function GivePage() {
 
                       <div className="p-6 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
                          <div className="flex items-center justify-between mb-4">
-                            <span className="text-sm font-bold text-gray-500 uppercase">Secure Payment</span>
+                            <span className="text-sm font-bold text-gray-500 uppercase">Pagamento Seguro</span>
                             <Lock size={16} className="text-gray-400" />
                          </div>
                          <div className="flex items-center gap-4 text-navy">
                             <CreditCard size={24} />
-                            <span className="font-medium">Stripe Payment Gateway (Test Mode)</span>
+                            <span className="font-medium">Gateway de Pagamento Stripe (Modo Teste)</span>
                          </div>
                       </div>
 
@@ -189,7 +189,7 @@ export default function GivePage() {
                           onClick={() => setStep(1)}
                           className="w-1/3 py-5 rounded-2xl font-bold text-gray-500 hover:bg-gray-50 transition-all"
                         >
-                          Back
+                          Voltar
                         </button>
                         <button 
                           type="submit"
@@ -200,7 +200,7 @@ export default function GivePage() {
                             <div className="w-6 h-6 border-3 border-navy/20 border-t-navy rounded-full animate-spin" />
                           ) : (
                             <>
-                              Complete Donation
+                              Concluir Doação
                               <Heart size={20} className="group-hover:scale-110 transition-transform" />
                             </>
                           )}
@@ -220,16 +220,16 @@ export default function GivePage() {
                     <div className="w-24 h-24 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-8 animate-bounce">
                       <CheckCircle2 size={48} />
                     </div>
-                    <h2 className="text-4xl font-poppins font-bold text-navy mb-4">God Bless You!</h2>
+                    <h2 className="text-4xl font-poppins font-bold text-navy mb-4">Que Deus o abençoe!</h2>
                     <p className="text-gray-500 mb-10 max-w-sm mx-auto">
-                      Your gift of <span className="font-bold text-wine">€{finalAmount}</span> has been received. 
-                      Thank you for partnering with us to spread the Gospel across Portugal.
+                      A sua oferta de <span className="font-bold text-wine">€{finalAmount}</span> foi recebida. 
+                      Obrigado por ser nosso parceiro na propagação do Evangelho em Angola.
                     </p>
                     <button 
                       onClick={() => { setStep(1); setCustomAmount(""); setForm({name: "", email: ""}); }}
                       className="btn-primary"
                     >
-                      Done
+                      Concluído
                     </button>
                   </motion.div>
                 )}
