@@ -1,4 +1,11 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Christ Embassy Angola App
+
+This is a [Next.js](https://nextjs.org) project for Christ Embassy Angola.
+
+## Recent Updates (April 2026)
+- Removed chat functionality project-wide.
+- Added Group Pastor Charles Okorodudu welcome page.
+- Expanded Contact page with church directory and church-specific messaging.
 
 ## Getting Started
 
