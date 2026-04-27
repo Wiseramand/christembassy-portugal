@@ -57,7 +57,7 @@ export default function AboutPage() {
             </h2>
             <div className="w-20 h-1 bg-wine" />
             <p className="text-gray-600 text-lg leading-relaxed">
-              A Christ Embassy Portugal é um braço vibrante da LoveWorld Incorporated, também conhecida como Believers' LoveWorld (BLW). 
+              A Christ Embassy Angola é um braço vibrante da LoveWorld Incorporated, também conhecida como Believers' LoveWorld (BLW). 
               Nossa visão é levar a presença divina de Deus às nações e aos povos do mundo e demonstrar o caráter do Espírito.
             </p>
             <p className="text-gray-600 leading-relaxed">
@@ -155,7 +155,7 @@ export default function AboutPage() {
            <h3 className="text-4xl font-poppins font-bold mb-6">Faça parte da nossa Família</h3>
            <p className="text-white/70 max-w-xl mx-auto mb-10">
              Quer seja novo na zona ou esteja à procura de uma casa espiritual, 
-             há um lugar para si aqui na Christ Embassy Portugal.
+             há um lugar para si aqui na Christ Embassy Angola.
            </p>
            <div className="flex flex-wrap justify-center gap-4">
               <Link href="/watch" className="bg-white text-wine px-10 py-4 rounded-full font-bold hover:bg-gold hover:text-navy transition-all">

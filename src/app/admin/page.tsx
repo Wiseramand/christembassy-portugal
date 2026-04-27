@@ -74,7 +74,7 @@ export default function AdminDashboard() {
     <div className="space-y-12">
       <div>
         <h1 className="text-4xl font-poppins font-bold text-navy mb-2">Visão Geral do Painel</h1>
-        <p className="text-gray-500">Bem-vindo de volta. Veja o que está a acontecer hoje na Christ Embassy Portugal.</p>
+        <p className="text-gray-500">Bem-vindo de volta. Veja o que está a acontecer hoje na Christ Embassy Angola.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

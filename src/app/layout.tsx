@@ -17,8 +17,8 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: "Christ Embassy Portugal | LoveWorld",
-  description: "Welcome to Christ Embassy Portugal. Giving your life a meaning.",
+  title: "Christ Embassy Angola | LoveWorld",
+  description: "Bem-vindo à Christ Embassy Angola. Dando um sentido à sua vida.",
 };
 
 export default function RootLayout({
@@ -27,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${poppins.variable} ${roboto.variable} antialiased`}>
+    <html lang="pt" className={`${poppins.variable} ${roboto.variable} antialiased`}>
       <body className="min-h-screen bg-off-white text-navy selection:bg-gold selection:text-navy flex flex-col">
         <ClientLayout>
           {children}

@@ -94,7 +94,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </div>
             <div className="flex flex-col">
                <span className="font-poppins font-black text-navy text-lg block leading-tight tracking-tight">Painel</span>
-               <span className="text-[10px] uppercase font-bold text-gold tracking-[0.2em]">Portugal</span>
+               <span className="text-[10px] uppercase font-bold text-gold tracking-[0.2em]">Angola</span>
             </div>
           </Link>
         </div>

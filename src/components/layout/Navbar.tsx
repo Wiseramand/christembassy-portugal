@@ -50,7 +50,7 @@ export default function Navbar() {
             )}>
               Christ Embassy
             </span>
-            <span className="text-xs font-medium text-gold uppercase tracking-widest">Portugal</span>
+            <span className="text-xs font-medium text-gold uppercase tracking-widest">Angola</span>
           </div>
         </Link>
 

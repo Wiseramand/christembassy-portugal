@@ -287,7 +287,7 @@ export default function EventsAdminPage() {
                        <input 
                          required
                          type="text"
-                         placeholder="Auditório Principal de Lisboa"
+                         placeholder="Auditório Principal de Luanda"
                          value={formData.location}
                          onChange={(e) => setFormData({...formData, location: e.target.value})}
                          className="w-full bg-off-white p-4 pl-12 rounded-xl outline-none"

@@ -16,7 +16,7 @@ export default function Footer() {
               <span className="text-xl font-poppins font-bold tracking-tight">Christ Embassy PT</span>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed max-w-xs">
-              Dando um sentido à sua vida. Junte-se a nós para uma experiência de transformação de vida na Christ Embassy Portugal.
+              Dando um sentido à sua vida. Junte-se a nós para uma experiência de transformação de vida na Christ Embassy Angola.
             </p>
             <div className="flex items-center gap-4">
               <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-gold hover:text-navy transition-all">
@@ -53,7 +53,7 @@ export default function Footer() {
               <li className="flex items-start gap-3">
                 <MapPin className="text-gold shrink-0 mt-1" size={18} />
                 <span className="text-gray-400 text-sm leading-relaxed">
-                  Lisboa, Portugal
+                  Luanda, Angola
                 </span>
               </li>
               <li className="flex items-center gap-3">
@@ -62,7 +62,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="text-gold shrink-0" size={18} />
-                <span className="text-gray-400 text-sm">contacto@ceportugal.pt</span>
+                <span className="text-gray-400 text-sm">contacto@ceangola.ao</span>
               </li>
             </ul>
           </div>
@@ -87,7 +87,7 @@ export default function Footer() {
         <div className="h-px bg-white/10 mb-8" />
 
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
-          <p>© {new Date().getFullYear()} Christ Embassy Portugal. Todos os direitos reservados.</p>
+          <p>© {new Date().getFullYear()} Christ Embassy Angola. Todos os direitos reservados.</p>
           <div className="flex gap-6">
             <Link href="/privacy" className="hover:text-white transition-colors">Política de Privacidade</Link>
             <Link href="/terms" className="hover:text-white transition-colors">Termos de Serviço</Link>

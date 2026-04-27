@@ -92,7 +92,7 @@ export default function Home() {
           <h2 className="text-gold text-sm font-bold uppercase tracking-widest mb-6">Torne-se nosso Parceiro</h2>
           <h3 className="text-4xl md:text-5xl font-poppins font-bold text-white mb-8">Apoiando a Expansão do Evangelho</h3>
           <p className="text-gray-400 max-w-2xl mx-auto mb-10 text-lg">
-            Cada semente que semeia contribui para a expansão do Evangelho de Jesus Cristo a milhões de pessoas em Portugal e em todo o mundo.
+            Cada semente que semeia contribui para a expansão do Evangelho de Jesus Cristo a milhões de pessoas em Angola e em todo o mundo.
           </p>
           <Link href="/give" className="btn-gold px-12 py-4 text-lg">
             Dar a sua Oferta

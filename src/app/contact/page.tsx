@@ -101,9 +101,9 @@ export default function ContactPage() {
               
               <div className="space-y-6">
                 {[
-                  { icon: MapPin, title: 'Localização', detail: 'Lisboa, Portugal', sub: 'Centro de Ministério Principal' },
+                  { icon: MapPin, title: 'Localização', detail: 'Luanda, Angola', sub: 'Centro de Ministério Principal' },
                   { icon: Phone, title: 'Ligue-nos', detail: '+351 000 000 000', sub: 'Seg-Sex, 9h - 17h' },
-                  { icon: Mail, title: 'Email', detail: 'contact@ceportugal.pt', sub: 'Informações Gerais' },
+                  { icon: Mail, title: 'Email', detail: 'contact@ceangola.ao', sub: 'Informações Gerais' },
                 ].map((item, i) => (
                   <motion.div 
                     key={i}

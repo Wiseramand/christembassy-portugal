@@ -7,10 +7,10 @@ import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 
 const fallbackEvents = [
-  { id: '1', title: 'Super Domingo', date: '2026-04-26T10:00:00', location: 'Centro de Lisboa', image_url: '/images/services.jpg' },
+  { id: '1', title: 'Super Domingo', date: '2026-04-26T10:00:00', location: 'Centro de Luanda', image_url: '/images/services.jpg' },
   { id: '2', title: 'Santa Ceia Global', date: '2026-05-03T16:00:00', location: 'Arena LoveWorld', image_url: '/images/services.jpg' },
   { id: '3', title: 'Canais de Cura', date: '2026-05-08T18:00:00', location: 'Global Online', image_url: '/images/services.jpg' },
-  { id: '4', title: 'Celebração de Domingo', date: '2026-05-31T09:00:00', location: 'Sede de Lisboa', image_url: '/images/services.jpg' },
+  { id: '4', title: 'Celebração de Domingo', date: '2026-05-31T09:00:00', location: 'Sede de Luanda', image_url: '/images/services.jpg' },
 ];
 
 export default function UpcomingEvents() {

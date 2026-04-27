@@ -46,7 +46,7 @@ export default function Hero() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-gold"></span>
               </span>
-              Bem-vindo à Christ Embassy Portugal
+              Bem-vindo à Christ Embassy Angola
             </motion.div>
 
             <h1 className="text-5xl md:text-7xl font-poppins font-bold text-white leading-tight mb-6">
