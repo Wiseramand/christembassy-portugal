@@ -6,7 +6,7 @@ import { supabase } from '@/lib/supabase';
 import { motion } from 'framer-motion';
 import { Users, Share2 } from 'lucide-react';
 import UpcomingEvents from '@/components/home/UpcomingEvents';
-import LiveChat from '@/components/chat/LiveChat';
+
 
 interface StreamSettings {
   is_live: boolean;
@@ -98,7 +98,7 @@ export default function WatchPage() {
           </div>
 
           <div className="space-y-8">
-            <LiveChat />
+            
 
             <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm">
                <h3 className="text-navy font-poppins font-bold mb-6">Horário dos Cultos</h3>

@@ -8,7 +8,6 @@ import {
   Video, 
   Calendar, 
   MessageSquare, 
-  MessageCircle,
   Heart, 
   Users, 
   Settings, 
@@ -22,7 +21,7 @@ import Link from 'next/link';
 
 const sidebarLinks = [
   { name: 'Painel', href: '/admin', icon: LayoutDashboard },
-  { name: 'Chat em Direto', href: '/admin/chat', icon: MessageCircle },
+
   { name: 'Controlo de Stream', href: '/admin/stream', icon: Video },
   { name: 'Eventos', href: '/admin/events', icon: Calendar },
   { name: 'Vídeos', href: '/admin/videos', icon: Video },

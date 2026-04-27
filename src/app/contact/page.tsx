@@ -2,9 +2,22 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Send, Phone, Mail, MapPin, MessageSquare, CheckCircle2 } from 'lucide-react';
+import { Send, Phone, Mail, MapPin, MessageSquare, CheckCircle2, Church } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/lib/supabase';
+
+const OTHER_CHURCHES = [
+  { name: 'Christ Embassy Benfica (Central)', address: 'Benfica, Luanda, Angola', phone: '+244 000 000 000' },
+  { name: 'Christ Embassy Camama', address: 'Camama, Luanda, Angola', phone: '+244 000 000 000' },
+  { name: 'Christ Embassy Cassenda', address: 'Cassenda, Luanda, Angola', phone: '+244 000 000 000' },
+  { name: 'Christ Embassy Zango', address: 'Zango, Luanda, Angola', phone: '+244 000 000 000' },
+  { name: 'Christ Embassy Lubango', address: 'Lubango, Huíla, Angola', phone: '+244 000 000 000' },
+  { name: 'Christ Embassy Lubango 2', address: 'Lubango, Huíla, Angola', phone: '+244 000 000 000' },
+  { name: 'Christ Embassy Cunene', address: 'Ondjiva, Cunene, Angola', phone: '+244 000 000 000' },
+  { name: 'Christ Embassy Cabinda', address: 'Cabinda, Angola', phone: '+244 000 000 000' },
+  { name: 'Christ Embassy Huambo', address: 'Huambo, Angola', phone: '+244 000 000 000' },
+  { name: 'Christ Embassy Virei', address: 'Virei, Namibe, Angola', phone: '+244 000 000 000' },
+];
 
 export default function ContactPage() {
   const [loading, setLoading] = useState(false);
@@ -13,6 +26,7 @@ export default function ContactPage() {
     name: '',
     email: '',
     phone: '',
+    church: 'Christ Embassy Benfica (Central)',
     message: ''
   });
 
@@ -27,15 +41,15 @@ export default function ContactPage() {
 
       if (error) throw error;
 
-      toast.success("Message sent successfully!", {
-        description: "We will get back to you shortly."
+      toast.success("Mensagem enviada com sucesso!", {
+        description: "Entraremos em contacto brevemente."
       });
       setSubmitted(true);
-      setFormData({ name: '', email: '', phone: '', message: '' });
+      setFormData({ name: '', email: '', phone: '', church: 'Christ Embassy Benfica (Central)', message: '' });
     } catch (err: any) {
       console.error("Error sending message:", err);
-      toast.error("Failed to send message", {
-        description: err.message || "Please try again later."
+      toast.error("Falha ao enviar mensagem", {
+        description: err.message || "Por favor, tente novamente mais tarde."
       });
     } finally {
       setLoading(false);
@@ -60,7 +74,7 @@ export default function ContactPage() {
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl md:text-6xl font-poppins font-bold mb-6"
           >
-            Get In Touch
+            Entre em Contacto
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
@@ -68,28 +82,28 @@ export default function ContactPage() {
             transition={{ delay: 0.1 }}
             className="text-gray-400 max-w-2xl mx-auto text-lg"
           >
-            Have a question, a testimony, or just want to say hello? 
-            We'd love to hear from you.
+            Tem uma pergunta, um testemunho ou apenas quer dizer olá? 
+            Gostaríamos muito de ouvi-lo.
           </motion.p>
         </div>
       </section>
 
       <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start mb-24">
           {/* Contact Information */}
           <div className="space-y-12">
             <div>
-              <h2 className="text-3xl font-poppins font-bold text-navy mb-6">Contact Information</h2>
+              <h2 className="text-3xl font-poppins font-bold text-navy mb-6">Informações de Contacto</h2>
               <p className="text-gray-500 mb-8 leading-relaxed">
-                Reach out to us through any of these channels or visit us during our service times. 
-                Our team is always ready to assist you.
+                Contacte-nos através de qualquer um destes canais ou visite-nos durante os nossos horários de culto. 
+                A nossa equipa está sempre pronta para o ajudar.
               </p>
               
               <div className="space-y-6">
                 {[
-                  { icon: MapPin, title: 'Our Location', detail: 'Lisbon, Portugal', sub: 'Main Ministry Center' },
-                  { icon: Phone, title: 'Call Us', detail: '+351 000 000 000', sub: 'Mon-Fri, 9am - 5pm' },
-                  { icon: Mail, title: 'Email Us', detail: 'contact@ceportugal.pt', sub: 'General Enquiries' },
+                  { icon: MapPin, title: 'Localização', detail: 'Lisboa, Portugal', sub: 'Centro de Ministério Principal' },
+                  { icon: Phone, title: 'Ligue-nos', detail: '+351 000 000 000', sub: 'Seg-Sex, 9h - 17h' },
+                  { icon: Mail, title: 'Email', detail: 'contact@ceportugal.pt', sub: 'Informações Gerais' },
                 ].map((item, i) => (
                   <motion.div 
                     key={i}
@@ -110,19 +124,6 @@ export default function ContactPage() {
                 ))}
               </div>
             </div>
-
-            {/* Map Placeholder */}
-            <div className="aspect-video bg-gray-200 rounded-3xl overflow-hidden relative grayscale hover:grayscale-0 transition-all duration-700">
-               <div className="absolute inset-0 flex items-center justify-center text-gray-400 flex-col gap-2">
-                  <MapPin size={48} />
-                  <span className="font-bold tracking-widest uppercase text-xs">Interactive Map Data</span>
-               </div>
-               <img 
-                 src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=1200" 
-                 className="w-full h-full object-cover opacity-50"
-                 alt="Map Placeholder"
-               />
-            </div>
           </div>
 
           {/* Contact Form */}
@@ -136,63 +137,77 @@ export default function ContactPage() {
                  <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
                     <CheckCircle2 size={40} />
                  </div>
-                 <h3 className="text-3xl font-poppins font-bold text-navy">Thank You!</h3>
-                 <p className="text-gray-500">Your message has been successfully delivered. We will respond to you shortly via email.</p>
+                 <h3 className="text-3xl font-poppins font-bold text-navy">Obrigado!</h3>
+                 <p className="text-gray-500">A sua mensagem foi entregue com sucesso. Responderemos em breve via email.</p>
                  <button 
                    onClick={() => setSubmitted(false)}
                    className="btn-primary mt-8"
                  >
-                   Send Another Message
+                   Enviar outra Mensagem
                  </button>
               </div>
             ) : (
               <>
-                <h3 className="text-2xl font-poppins font-bold text-navy mb-8">Send us a Message</h3>
+                <h3 className="text-2xl font-poppins font-bold text-navy mb-8">Envie-nos uma Mensagem</h3>
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Full Name</label>
+                      <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Nome Completo</label>
                       <input 
                         required
                         type="text"
                         value={formData.name}
                         onChange={(e) => setFormData({...formData, name: e.target.value})}
-                        placeholder="John Doe"
+                        placeholder="João Silva"
                         className="w-full bg-off-white p-4 rounded-xl outline-none focus:ring-2 focus:ring-wine/20 transition-all border-2 border-transparent focus:border-wine"
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Email Address</label>
+                      <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Endereço de Email</label>
                       <input 
                         required
                         type="email"
                         value={formData.email}
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
-                        placeholder="john@example.com"
+                        placeholder="joao@exemplo.com"
                         className="w-full bg-off-white p-4 rounded-xl outline-none focus:ring-2 focus:ring-wine/20 transition-all border-2 border-transparent focus:border-wine"
                       />
                     </div>
                   </div>
 
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Phone Number (Optional)</label>
-                    <input 
-                      type="tel"
-                      value={formData.phone}
-                      onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                      placeholder="+351 000 000 000"
-                      className="w-full bg-off-white p-4 rounded-xl outline-none focus:ring-2 focus:ring-wine/20 transition-all border-2 border-transparent focus:border-wine"
-                    />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Telemóvel (Opcional)</label>
+                      <input 
+                        type="tel"
+                        value={formData.phone}
+                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                        placeholder="+351 000 000 000"
+                        className="w-full bg-off-white p-4 rounded-xl outline-none focus:ring-2 focus:ring-wine/20 transition-all border-2 border-transparent focus:border-wine"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Igreja Destinatária</label>
+                      <select 
+                        value={formData.church}
+                        onChange={(e) => setFormData({...formData, church: e.target.value})}
+                        className="w-full bg-off-white p-4 rounded-xl outline-none focus:ring-2 focus:ring-wine/20 transition-all border-2 border-transparent focus:border-wine appearance-none cursor-pointer"
+                      >
+                        {OTHER_CHURCHES.map((church) => (
+                          <option key={church.name} value={church.name}>{church.name}</option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">How can we help you?</label>
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Como podemos ajudar?</label>
                     <textarea 
                       required
                       rows={5}
                       value={formData.message}
                       onChange={(e) => setFormData({...formData, message: e.target.value})}
-                      placeholder="Write your message here..."
+                      placeholder="Escreva a sua mensagem aqui..."
                       className="w-full bg-off-white p-4 rounded-xl outline-none focus:ring-2 focus:ring-wine/20 transition-all border-2 border-transparent focus:border-wine resize-none"
                     ></textarea>
                   </div>
@@ -206,7 +221,7 @@ export default function ContactPage() {
                        <div className="w-6 h-6 border-3 border-white/20 border-t-white rounded-full animate-spin" />
                     ) : (
                       <>
-                        Send Message
+                        Enviar Mensagem
                         <Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                       </>
                     )}
@@ -216,6 +231,51 @@ export default function ContactPage() {
             )}
           </motion.div>
         </div>
+
+        {/* Other Churches Directory */}
+        <section className="mt-16">
+          <div className="text-center mb-16">
+            <h2 className="text-gold font-bold uppercase tracking-widest mb-4">A Nossa Presença</h2>
+            <h3 className="text-4xl font-poppins font-bold text-navy">Outras Igrejas do Grupo</h3>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {OTHER_CHURCHES.map((church, i) => (
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.05 }}
+                className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all group"
+              >
+                <div className="w-12 h-12 bg-navy/5 rounded-2xl flex items-center justify-center text-navy mb-6 group-hover:bg-wine group-hover:text-white transition-colors">
+                  <Church size={24} />
+                </div>
+                <h4 className="text-xl font-poppins font-bold text-navy mb-4">{church.name}</h4>
+                <div className="space-y-3 text-gray-500">
+                  <div className="flex items-start gap-3">
+                    <MapPin size={18} className="shrink-0 text-gold" />
+                    <span className="text-sm">{church.address}</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Phone size={18} className="shrink-0 text-gold" />
+                    <span className="text-sm">{church.phone}</span>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => {
+                    setFormData({ ...formData, church: church.name });
+                    window.scrollTo({ top: 400, behavior: 'smooth' });
+                  }}
+                  className="mt-8 text-wine font-bold text-sm flex items-center gap-2 group-hover:gap-4 transition-all"
+                >
+                  Enviar Mensagem <Send size={14} />
+                </button>
+              </motion.div>
+            ))}
+          </div>
+        </section>
       </div>
     </div>
   );
