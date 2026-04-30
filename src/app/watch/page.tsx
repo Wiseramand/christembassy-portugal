@@ -48,6 +48,8 @@ export default function WatchPage() {
     city: ''
   });
 
+  const [viewerCount, setViewerCount] = useState(0);
+
   useEffect(() => {
     // Check if already entered in this session
     const entered = localStorage.getItem('ce_visitor_entered');
@@ -72,17 +74,55 @@ export default function WatchPage() {
 
     fetchSettings();
 
-    const channel = supabase
+    // 1. Database Changes Subscription
+    const dbChannel = supabase
       .channel('stream_changes')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'stream_settings' }, (payload) => {
         setSettings(payload.new as StreamSettings);
       })
       .subscribe();
 
+    // 2. Realtime Presence for Viewer Count
+    const presenceChannel = supabase.channel('online-viewers', {
+      config: { presence: { key: 'viewer' } }
+    });
+
+    presenceChannel
+      .on('presence', { event: 'sync' }, () => {
+        const newState = presenceChannel.presenceState();
+        const total = Object.values(newState).flat().length;
+        setViewerCount(total);
+      })
+      .subscribe(async (status) => {
+        if (status === 'SUBSCRIBED') {
+          await presenceChannel.track({ online_at: new Date().toISOString() });
+        }
+      });
+
     return () => {
-      supabase.removeChannel(channel);
+      supabase.removeChannel(dbChannel);
+      supabase.removeChannel(presenceChannel);
     };
   }, []);
+
+  const handleShare = async () => {
+    const shareData = {
+      title: 'Christ Embassy Portugal - Direto',
+      text: 'Vem assistir ao culto em direto connosco! A bênção está à tua espera.',
+      url: window.location.href
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        toast.info("Link copiado para a área de transferência!");
+      }
+    } catch (err) {
+      console.warn("Share failed:", err);
+    }
+  };
 
   const handleEnter = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -247,14 +287,17 @@ export default function WatchPage() {
                   <p className="text-gray-500 font-medium">Christ Embassy Portugal Online</p>
                 </div>
                 <div className="flex items-center gap-4">
-                  <button className="flex items-center gap-2 px-5 py-2.5 bg-gray-50 rounded-xl font-bold text-navy hover:bg-navy hover:text-white transition-all group">
+                  <button 
+                    onClick={handleShare}
+                    className="flex items-center gap-2 px-5 py-2.5 bg-gray-50 rounded-xl font-bold text-navy hover:bg-navy hover:text-white transition-all group"
+                  >
                     <Share2 size={18} className="group-hover:scale-110 transition-transform" />
                     Partilhar
                   </button>
                   <div className="h-10 w-px bg-gray-100 hidden md:block" />
                   <div className="flex items-center gap-2 text-wine font-bold">
                     <Users size={20} />
-                    <span>A assistir agora</span>
+                    <span>{viewerCount} a assistir agora</span>
                   </div>
                 </div>
               </div>

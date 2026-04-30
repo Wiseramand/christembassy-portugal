@@ -11,20 +11,27 @@ interface HLSPlayerProps {
 
 export default function HLSPlayer({ url, isLive, autoPlay = true }: HLSPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const hlsRef = useRef<Hls | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) return;
+    if (!video || !isLive || !url) return;
 
-    let hls: Hls | null = null;
+    // Limpar instância anterior se existir para evitar áudio duplo
+    if (hlsRef.current) {
+      hlsRef.current.destroy();
+      hlsRef.current = null;
+    }
 
     if (Hls.isSupported()) {
-      hls = new Hls({
+      const hls = new Hls({
         enableWorker: true,
         lowLatencyMode: true,
+        backBufferLength: 0,
       });
 
+      hlsRef.current = hls;
       hls.loadSource(url);
       hls.attachMedia(video);
 
@@ -38,38 +45,39 @@ export default function HLSPlayer({ url, isLive, autoPlay = true }: HLSPlayerPro
         if (data.fatal) {
           switch (data.type) {
             case Hls.ErrorTypes.NETWORK_ERROR:
-              setError("Network error encountered. Please check your connection.");
-              hls?.startLoad();
+              hls.startLoad();
               break;
             case Hls.ErrorTypes.MEDIA_ERROR:
-              setError("Media error encountered. Attempting to recover...");
-              hls?.recoverMediaError();
+              hls.recoverMediaError();
               break;
             default:
-              setError("Failed to load stream. Please try again later.");
-              hls?.destroy();
+              hls.destroy();
               break;
           }
         }
       });
-    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-      // Native HLS support (Safari)
+    } 
+    else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      // Suporte nativo (Safari / iOS)
       video.src = url;
       video.addEventListener('loadedmetadata', () => {
         if (autoPlay) {
           video.play().catch((e) => console.log("Autoplay blocked:", e));
         }
       });
-    } else {
-      setError("Your browser does not support HLS playback.");
     }
 
     return () => {
-      if (hls) {
-        hls.destroy();
+      if (hlsRef.current) {
+        hlsRef.current.destroy();
+        hlsRef.current = null;
+      }
+      if (video) {
+        video.src = "";
+        video.load();
       }
     };
-  }, [url, autoPlay]);
+  }, [url, isLive, autoPlay]);
 
   if (!isLive) {
     return (
@@ -79,10 +87,9 @@ export default function HLSPlayer({ url, isLive, autoPlay = true }: HLSPlayerPro
              <div className="w-2 h-2 bg-white/20 rounded-full" />
            </div>
         </div>
-        <h3 className="text-2xl font-poppins font-bold mb-2 text-white">Stream is currently offline</h3>
+        <h3 className="text-2xl font-poppins font-bold mb-2 text-white">O Stream está Offline</h3>
         <p className="text-gray-400 max-w-sm">
-          Visit our schedule to see when the next live session starts. 
-          In the meantime, you can watch our previous teachings.
+          Consulte o nosso horário para saber quando começa a próxima sessão em direto.
         </p>
       </div>
     );
@@ -101,11 +108,11 @@ export default function HLSPlayer({ url, isLive, autoPlay = true }: HLSPlayerPro
         className="w-full h-full"
         controls
         playsInline
-        poster="https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&q=80&w=2000"
+        autoPlay={autoPlay}
       />
 
       <div className="absolute top-4 left-4 z-10">
-        <div className="bg-wine text-white px-3 py-1 rounded flex items-center gap-2 text-xs font-bold uppercase tracking-wider animate-fade-in-up">
+        <div className="bg-wine text-white px-3 py-1 rounded flex items-center gap-2 text-xs font-bold uppercase tracking-wider animate-pulse">
            <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
