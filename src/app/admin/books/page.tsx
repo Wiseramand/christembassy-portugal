@@ -1,22 +1,23 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Book, 
-  Plus, 
   Edit, 
   Trash2, 
-  Search, 
   PlusCircle, 
   Save, 
   X,
   User,
   Tag,
   Link as LinkIcon,
-  FileText,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Upload,
+  FileDown,
+  Loader2,
+  CheckCircle2
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -35,6 +36,8 @@ export default function BooksAdminPage() {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingBook, setEditingBook] = useState<ChurchBook | null>(null);
+  const [isUploading, setIsUploading] = useState<string | null>(null); // 'pdf' or 'image'
+  
   const [formData, setFormData] = useState({
     title: '',
     author: 'Pastor Chris Oyakhilome',
@@ -43,6 +46,9 @@ export default function BooksAdminPage() {
     pdf_url: '',
     category: ''
   });
+
+  const pdfInputRef = useRef<HTMLInputElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   async function fetchBooks() {
     setLoading(true);
@@ -89,12 +95,48 @@ export default function BooksAdminPage() {
     setIsModalOpen(true);
   };
 
+  const uploadFile = async (file: File, type: 'pdf' | 'image') => {
+    try {
+      setIsUploading(type);
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+      const filePath = `${type}s/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('books')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('books')
+        .getPublicUrl(filePath);
+
+      if (type === 'pdf') {
+        setFormData(prev => ({ ...prev, pdf_url: publicUrl }));
+        toast.success("PDF carregado com sucesso!");
+      } else {
+        setFormData(prev => ({ ...prev, image_url: publicUrl }));
+        toast.success("Capa carregada com sucesso!");
+      }
+    } catch (error: any) {
+      toast.error(`Erro no upload: ${error.message}`);
+    } finally {
+      setIsUploading(null);
+    }
+  };
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (!formData.pdf_url) {
+      toast.error("Por favor, carregue o ficheiro PDF primeiro.");
+      return;
+    }
+
     const bookPayload = {
       ...formData,
-      image_url: formData.image_url || '/images/services.jpg',
+      image_url: formData.image_url || 'https://images.unsplash.com/photo-1544427920-c49ccfb85579?auto=format&fit=crop&q=80&w=800',
       updated_at: new Date().toISOString()
     };
 
@@ -136,7 +178,7 @@ export default function BooksAdminPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
            <h1 className="text-4xl font-poppins font-bold text-navy mb-2">Gestão da Livraria</h1>
-           <p className="text-gray-500">Adicione e gira os livros digitais e PDFs disponíveis para os fiéis.</p>
+           <p className="text-gray-500">Faça o upload dos seus livros e capas diretamente do computador.</p>
         </div>
         <button 
           onClick={() => handleOpenModal()}
@@ -156,7 +198,7 @@ export default function BooksAdminPage() {
          <div className="bg-white p-20 rounded-3xl text-center border-2 border-dashed border-gray-100">
             <Book className="mx-auto mb-6 text-gray-100" size={80} />
             <h3 className="text-xl font-poppins font-bold text-navy mb-2">A Livraria está Vazia</h3>
-            <p className="text-gray-500 mb-8 max-w-sm mx-auto">Comece por adicionar o seu primeiro livro PDF para que os membros o possam descarregar.</p>
+            <p className="text-gray-500 mb-8 max-w-sm mx-auto">Use o botão acima para carregar o seu primeiro ficheiro PDF.</p>
             <button onClick={() => handleOpenModal()} className="btn-primary">Começar Agora</button>
          </div>
       ) : (
@@ -200,8 +242,8 @@ export default function BooksAdminPage() {
                       {book.description}
                    </p>
                    <div className="mt-auto pt-6 border-t border-gray-50 flex items-center gap-2 text-xs font-bold text-wine uppercase tracking-widest">
-                      <LinkIcon size={14} />
-                      Link do PDF Ativo
+                      <FileDown size={14} />
+                      PDF Carregado no Sistema
                    </div>
                 </div>
               </motion.div>
@@ -236,6 +278,7 @@ export default function BooksAdminPage() {
               </div>
 
               <form onSubmit={handleSave} className="p-8 overflow-y-auto space-y-6">
+                 {/* Title */}
                  <div className="space-y-2">
                     <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Título do Livro</label>
                     <input 
@@ -248,6 +291,76 @@ export default function BooksAdminPage() {
                     />
                  </div>
 
+                 {/* Upload Section */}
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* PDF Upload */}
+                    <div className="space-y-2">
+                       <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Ficheiro PDF</label>
+                       <input 
+                         type="file" 
+                         accept=".pdf"
+                         ref={pdfInputRef}
+                         onChange={(e) => e.target.files?.[0] && uploadFile(e.target.files[0], 'pdf')}
+                         className="hidden" 
+                       />
+                       <button 
+                         type="button"
+                         onClick={() => pdfInputRef.current?.click()}
+                         disabled={isUploading === 'pdf'}
+                         className={`w-full p-4 rounded-xl border-2 border-dashed flex flex-col items-center justify-center gap-2 transition-all ${
+                            formData.pdf_url 
+                              ? 'border-green-200 bg-green-50 text-green-700' 
+                              : 'border-gray-200 bg-gray-50 text-gray-400 hover:border-wine hover:bg-wine/5'
+                         }`}
+                       >
+                          {isUploading === 'pdf' ? (
+                            <Loader2 className="animate-spin text-wine" size={24} />
+                          ) : formData.pdf_url ? (
+                            <CheckCircle2 size={24} />
+                          ) : (
+                            <Upload size={24} />
+                          )}
+                          <span className="text-xs font-bold uppercase tracking-wider">
+                            {isUploading === 'pdf' ? 'A carregar...' : formData.pdf_url ? 'PDF Pronto' : 'Carregar PDF'}
+                          </span>
+                       </button>
+                    </div>
+
+                    {/* Image Upload */}
+                    <div className="space-y-2">
+                       <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Capa do Livro (Opcional)</label>
+                       <input 
+                         type="file" 
+                         accept="image/*"
+                         ref={imageInputRef}
+                         onChange={(e) => e.target.files?.[0] && uploadFile(e.target.files[0], 'image')}
+                         className="hidden" 
+                       />
+                       <button 
+                         type="button"
+                         onClick={() => imageInputRef.current?.click()}
+                         disabled={isUploading === 'image'}
+                         className={`w-full p-4 rounded-xl border-2 border-dashed flex flex-col items-center justify-center gap-2 transition-all ${
+                            formData.image_url 
+                              ? 'border-green-200 bg-green-50 text-green-700' 
+                              : 'border-gray-200 bg-gray-50 text-gray-400 hover:border-gold hover:bg-gold/5'
+                         }`}
+                       >
+                          {isUploading === 'image' ? (
+                            <Loader2 className="animate-spin text-gold" size={24} />
+                          ) : formData.image_url ? (
+                            <CheckCircle2 size={24} />
+                          ) : (
+                            <ImageIcon size={24} />
+                          )}
+                          <span className="text-xs font-bold uppercase tracking-wider">
+                            {isUploading === 'image' ? 'A carregar...' : formData.image_url ? 'Capa Pronta' : 'Carregar Capa'}
+                          </span>
+                       </button>
+                    </div>
+                 </div>
+
+                 {/* Author & Category */}
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                        <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Autor</label>
@@ -279,38 +392,9 @@ export default function BooksAdminPage() {
                  </div>
 
                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">URL do PDF</label>
-                    <div className="relative">
-                       <LinkIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" size={18} />
-                       <input 
-                         required
-                         type="text"
-                         placeholder="/books/livro.pdf ou URL externa"
-                         value={formData.pdf_url}
-                         onChange={(e) => setFormData({...formData, pdf_url: e.target.value})}
-                         className="w-full bg-off-white p-4 pl-12 rounded-xl outline-none"
-                       />
-                    </div>
-                 </div>
-
-                 <div className="space-y-2">
-                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">URL da Imagem da Capa</label>
-                    <div className="relative">
-                       <ImageIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" size={18} />
-                       <input 
-                         type="text"
-                         placeholder="URL da imagem ou /images/capa.jpg"
-                         value={formData.image_url}
-                         onChange={(e) => setFormData({...formData, image_url: e.target.value})}
-                         className="w-full bg-off-white p-4 pl-12 rounded-xl outline-none"
-                       />
-                    </div>
-                 </div>
-
-                 <div className="space-y-2">
                     <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Descrição</label>
                     <textarea 
-                      rows={4}
+                      rows={3}
                       placeholder="Resumo do livro..."
                       value={formData.description}
                       onChange={(e) => setFormData({...formData, description: e.target.value})}
@@ -328,10 +412,11 @@ export default function BooksAdminPage() {
                     </button>
                     <button 
                       type="submit"
-                      className="w-2/3 bg-navy text-white p-4 rounded-xl font-bold hover:bg-wine transition-all flex items-center justify-center gap-2 shadow-lg"
+                      disabled={!!isUploading}
+                      className="w-2/3 bg-navy text-white p-4 rounded-xl font-bold hover:bg-wine transition-all flex items-center justify-center gap-2 shadow-lg disabled:opacity-50"
                     >
                        <Save size={18} />
-                       {editingBook ? 'Guardar Alterações' : 'Adicionar Livro'}
+                       {editingBook ? 'Guardar Alterações' : 'Finalizar e Publicar'}
                     </button>
                  </div>
               </form>
