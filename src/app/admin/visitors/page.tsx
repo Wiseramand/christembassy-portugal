@@ -174,78 +174,81 @@ export default function VisitorsAdminPage() {
   const totalPages = Math.ceil(totalCount / pageSize);
 
   return (
-    <div className="space-y-8 pb-24">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div>
-          <div className="flex items-center gap-3 mb-2">
-            <h1 className="text-4xl font-poppins font-bold text-navy">Visitantes</h1>
-            <div className="flex items-center gap-2 bg-wine/10 text-wine px-3 py-1 rounded-full text-xs font-bold">
-              <span className={`w-2 h-2 rounded-full ${viewerCount > 0 ? 'bg-green-500 animate-pulse' : 'bg-gray-300'}`} />
-              {viewerCount} EM DIRETO
+    <div className="space-y-8 pb-24 relative">
+      {/* Cabeçalho Fixo com Filtros */}
+      <div className="sticky top-0 lg:top-[-12px] z-30 bg-gray-50/95 backdrop-blur-sm pt-4 pb-6 space-y-8 -mx-4 px-4 lg:-mx-12 lg:px-12 transition-all border-b border-transparent">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <h1 className="text-4xl font-poppins font-bold text-navy">Visitantes</h1>
+              <div className="flex items-center gap-2 bg-wine/10 text-wine px-3 py-1 rounded-full text-xs font-bold">
+                <span className={`w-2 h-2 rounded-full ${viewerCount > 0 ? 'bg-green-500 animate-pulse' : 'bg-gray-300'}`} />
+                {viewerCount} EM DIRETO
+              </div>
             </div>
+            <p className="text-gray-500">Total histórico: <span className="font-bold text-navy">{totalCount}</span> entradas registadas.</p>
           </div>
-          <p className="text-gray-500">Total histórico: <span className="font-bold text-navy">{totalCount}</span> entradas registadas.</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <button 
-            onClick={exportToPDF}
-            className="flex items-center gap-2 bg-white text-navy px-5 py-3 rounded-xl font-bold border border-gray-200 hover:bg-gray-50 transition-all shadow-sm"
-          >
-            <FileText size={18} className="text-wine" />
-            Exportar PDF
-          </button>
-          <button 
-            onClick={exportToExcel}
-            className="flex items-center gap-2 bg-navy text-white px-5 py-3 rounded-xl font-bold hover:bg-wine transition-all shadow-lg"
-          >
-            <TableIcon size={18} className="text-gold" />
-            Exportar Excel
-          </button>
-        </div>
-      </div>
-
-      {/* Filters & Search */}
-      <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex flex-col md:flex-row items-center justify-between gap-6">
-        <form onSubmit={handleSearch} className="relative w-full md:w-96 group">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-wine transition-colors" size={20} />
-          <input 
-            type="text"
-            placeholder="Pesquisar visitantes..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-off-white p-4 pl-12 rounded-2xl outline-none border-2 border-transparent focus:border-wine/20 transition-all"
-          />
-        </form>
-
-        <div className="flex items-center gap-4 w-full md:w-auto overflow-x-auto pb-2 md:pb-0">
-          <div className="flex items-center gap-2 bg-off-white p-1 rounded-2xl">
-            {[
-              { id: 'all', label: 'Todos' },
-              { id: 'day', label: 'Hoje' },
-              { id: 'week', label: 'Semana' },
-              { id: 'month', label: 'Mês' },
-              { id: 'year', label: 'Ano' }
-            ].map((r) => (
-              <button
-                key={r.id}
-                onClick={() => { setFilterRange(r.id); setCurrentPage(1); }}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-                  filterRange === r.id 
-                    ? 'bg-navy text-white shadow-md' 
-                    : 'text-gray-400 hover:text-navy'
-                }`}
-              >
-                {r.label}
-              </button>
-            ))}
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={exportToPDF}
+              className="flex items-center gap-2 bg-white text-navy px-5 py-3 rounded-xl font-bold border border-gray-200 hover:bg-gray-50 transition-all shadow-sm active:scale-95"
+            >
+              <FileText size={18} className="text-wine" />
+              Exportar PDF
+            </button>
+            <button 
+              onClick={exportToExcel}
+              className="flex items-center gap-2 bg-navy text-white px-5 py-3 rounded-xl font-bold hover:bg-wine transition-all shadow-lg active:scale-95"
+            >
+              <TableIcon size={18} className="text-gold" />
+              Exportar Excel
+            </button>
           </div>
-          <button 
-            onClick={fetchVisitors}
-            className="w-10 h-10 bg-off-white rounded-xl flex items-center justify-center text-gray-400 hover:text-navy transition-all"
-            title="Recarregar dados"
-          >
-            <RefreshCw size={18} className={loading ? 'animate-spin' : ''} />
-          </button>
+        </div>
+
+        {/* Filters & Search - Now inside the sticky container */}
+        <div className="bg-white p-6 rounded-3xl shadow-md border border-gray-100 flex flex-col md:flex-row items-center justify-between gap-6">
+          <form onSubmit={handleSearch} className="relative w-full md:w-96 group">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-wine transition-colors" size={20} />
+            <input 
+              type="text"
+              placeholder="Pesquisar visitantes..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full bg-off-white p-4 pl-12 rounded-2xl outline-none border-2 border-transparent focus:border-wine/20 transition-all"
+            />
+          </form>
+
+          <div className="flex items-center gap-4 w-full md:w-auto overflow-x-auto pb-2 md:pb-0">
+            <div className="flex items-center gap-2 bg-off-white p-1 rounded-2xl">
+              {[
+                { id: 'all', label: 'Todos' },
+                { id: 'day', label: 'Hoje' },
+                { id: 'week', label: 'Semana' },
+                { id: 'month', label: 'Mês' },
+                { id: 'year', label: 'Ano' }
+              ].map((r) => (
+                <button
+                  key={r.id}
+                  onClick={() => { setFilterRange(r.id); setCurrentPage(1); }}
+                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                    filterRange === r.id 
+                      ? 'bg-navy text-white shadow-md' 
+                      : 'text-gray-400 hover:text-navy'
+                  }`}
+                >
+                  {r.label}
+                </button>
+              ))}
+            </div>
+            <button 
+              onClick={fetchVisitors}
+              className="w-10 h-10 bg-off-white rounded-xl flex items-center justify-center text-gray-400 hover:text-navy transition-all"
+              title="Recarregar dados"
+            >
+              <RefreshCw size={18} className={loading ? 'animate-spin' : ''} />
+            </button>
+          </div>
         </div>
       </div>
 
