@@ -202,7 +202,7 @@ export default function BooksAdminPage() {
             <button onClick={() => handleOpenModal()} className="btn-primary">Começar Agora</button>
          </div>
       ) : (
-         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6">
             {books.map((book) => (
               <motion.div 
                 key={book.id}
@@ -235,15 +235,15 @@ export default function BooksAdminPage() {
                       </span>
                    </div>
                 </div>
-                <div className="p-8 flex-grow flex flex-col">
-                   <h3 className="text-xl font-poppins font-bold text-navy mb-2 line-clamp-1">{book.title}</h3>
-                   <p className="text-gray-400 text-sm mb-4">Por {book.author}</p>
-                   <p className="text-gray-500 text-sm leading-relaxed line-clamp-3 mb-6">
+                <div className="p-4 flex-grow flex flex-col">
+                   <h3 className="text-base font-poppins font-bold text-navy mb-1 line-clamp-1">{book.title}</h3>
+                   <p className="text-gray-400 text-[10px] mb-3 uppercase tracking-widest font-medium">Por {book.author}</p>
+                   <p className="text-gray-500 text-xs leading-relaxed line-clamp-2 mb-4">
                       {book.description}
                    </p>
-                   <div className="mt-auto pt-6 border-t border-gray-50 flex items-center gap-2 text-xs font-bold text-wine uppercase tracking-widest">
-                      <FileDown size={14} />
-                      PDF Carregado no Sistema
+                   <div className="mt-auto pt-4 border-t border-gray-50 flex items-center gap-2 text-[10px] font-bold text-wine uppercase tracking-widest">
+                      <FileDown size={12} />
+                      PDF Carregado
                    </div>
                 </div>
               </motion.div>

@@ -89,14 +89,14 @@ export default function LibraryPage() {
       </section>
 
       {/* Books Grid */}
-      <section className="py-24 container mx-auto px-6">
+      <section className="py-12 container mx-auto px-6">
         {loading ? (
            <div className="flex flex-col items-center justify-center py-24">
               <div className="w-12 h-12 border-4 border-navy/10 border-t-gold rounded-full animate-spin mb-4" />
               <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">A carregar biblioteca...</p>
            </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {filteredBooks.map((book, idx) => (
               <motion.div 
                 key={book.id}
@@ -123,32 +123,32 @@ export default function LibraryPage() {
                    </div>
                 </div>
 
-                <div className="p-8 flex flex-col flex-grow">
-                  <h3 className="text-xl font-poppins font-bold text-navy mb-2 line-clamp-1">{book.title}</h3>
-                  <p className="text-gray-400 text-xs font-medium mb-4 uppercase tracking-widest">Por {book.author}</p>
-                  <p className="text-gray-500 text-sm leading-relaxed mb-8 line-clamp-3">
+                <div className="p-4 flex flex-col flex-grow">
+                  <h3 className="text-base font-poppins font-bold text-navy mb-1 line-clamp-1">{book.title}</h3>
+                  <p className="text-gray-400 text-[10px] font-medium mb-3 uppercase tracking-widest">Por {book.author}</p>
+                  <p className="text-gray-500 text-xs leading-relaxed mb-4 line-clamp-2">
                     {book.description}
                   </p>
                   
-                  <div className="mt-auto pt-6 border-t border-gray-100 flex items-center justify-between gap-4">
+                  <div className="mt-auto pt-4 border-t border-gray-50 flex items-center justify-between gap-2">
                     <a 
                       href={book.pdf_url} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="flex-grow flex items-center justify-center gap-2 bg-navy text-white py-3 rounded-xl font-bold text-sm hover:bg-wine transition-all"
+                      className="flex-grow flex items-center justify-center gap-2 bg-navy text-white py-2 rounded-lg font-bold text-[11px] hover:bg-wine transition-all"
                     >
-                      <Eye size={16} />
-                      Ler Agora
+                      <Eye size={12} />
+                      Ler
                     </a>
                     <a 
                       href={book.pdf_url}
                       target="_blank"
                       rel="noopener noreferrer"
                       download
-                      className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center text-gold hover:bg-gold hover:text-navy transition-all shrink-0"
+                      className="w-8 h-8 bg-gold/10 rounded-lg flex items-center justify-center text-gold hover:bg-gold hover:text-navy transition-all shrink-0"
                       title="Descarregar PDF"
                     >
-                      <Download size={20} />
+                      <Download size={14} />
                     </a>
                   </div>
                 </div>
