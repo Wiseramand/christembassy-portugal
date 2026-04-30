@@ -101,13 +101,13 @@ export default function EventsAdminPage() {
       const filePath = `events/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
-        .from('books') // Reusing the same bucket as requested "mesmo upload"
+        .from('Livros')
         .upload(filePath, file);
 
       if (uploadError) throw uploadError;
 
       const { data: { publicUrl } } = supabase.storage
-        .from('books')
+        .from('Livros')
         .getPublicUrl(filePath);
 
       setFormData(prev => ({ ...prev, image_url: publicUrl }));

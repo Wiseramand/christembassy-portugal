@@ -103,13 +103,13 @@ export default function BooksAdminPage() {
       const filePath = `${type}s/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
-        .from('books')
+        .from('Livros')
         .upload(filePath, file);
 
       if (uploadError) throw uploadError;
 
       const { data: { publicUrl } } = supabase.storage
-        .from('books')
+        .from('Livros')
         .getPublicUrl(filePath);
 
       if (type === 'pdf') {
