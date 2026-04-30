@@ -6,10 +6,10 @@ import { Play, X, Clock, Heart, PlayCircle } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 
 const fallbackVideos = [
-  { id: '1', title: 'O Poder da Sua Mente', duration: '45:20', thumbnail_url: 'https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&q=80&w=600', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
-  { id: '2', title: 'Viver no Espírito', duration: '52:15', thumbnail_url: 'https://images.unsplash.com/photo-1490730141103-6cac27aaab94?auto=format&fit=crop&q=80&w=600', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
-  { id: '3', title: 'Fé que Funciona', duration: '38:10', thumbnail_url: 'https://images.unsplash.com/photo-1544427920-c49ccfb85579?auto=format&fit=crop&q=80&w=600', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
-  { id: '4', title: 'Prosperidade Sem Fim', duration: '1:05:30', thumbnail_url: 'https://images.unsplash.com/photo-1518057111178-44a106bad636?auto=format&fit=crop&q=80&w=600', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+  { id: '1', title: 'Culto Especial', duration: 'Ao Vivo', thumbnail_url: 'https://img.youtube.com/vi/DRkSU-BjHq4/maxresdefault.jpg', url: 'https://www.youtube.com/embed/DRkSU-BjHq4?start=24' },
+  { id: '2', title: 'A Palavra de Deus', duration: 'Ao Vivo', thumbnail_url: 'https://img.youtube.com/vi/hr5nBhl4gGo/maxresdefault.jpg', url: 'https://www.youtube.com/embed/hr5nBhl4gGo?start=5034' },
+  { id: '3', title: 'Crescimento Espiritual', duration: 'Ao Vivo', thumbnail_url: 'https://img.youtube.com/vi/y4UybMa3EE0/maxresdefault.jpg', url: 'https://www.youtube.com/embed/y4UybMa3EE0?start=1030' },
+  { id: '4', title: 'Transformação Divina', duration: 'Ao Vivo', thumbnail_url: 'https://img.youtube.com/vi/M_GQuGjyJuA/maxresdefault.jpg', url: 'https://www.youtube.com/embed/M_GQuGjyJuA?start=1649' },
 ];
 
 export default function VideoRecordings() {

@@ -6,9 +6,9 @@ import { motion } from 'framer-motion';
 import { Shield, Target, Users, BookOpen, Heart, Globe } from 'lucide-react';
 
 const values = [
-  { icon: Shield, title: 'Nossa Fé', text: 'Acreditamos no poder da Palavra de Deus para transformar vidas e circunstâncias, trazendo vitória em todos os aspetos da vida.' },
-  { icon: Target, title: 'Nossa Missão', text: 'Levar a presença divina de Deus às nações e aos povos do mundo e demonstrar o caráter do Espírito.' },
-  { icon: Globe, title: 'Nossa Visão', text: 'Ver cada homem, mulher e criança entrar em sua herança em Cristo Jesus e caminhar na plenitude de Deus.' },
+  { icon: Globe, title: 'A Nossa Visão', text: 'Levar a presença divina de Deus aos povos e às nações do mundo e demonstrar o carácter do Espírito Santo.' },
+  { icon: Target, title: 'A Nossa Missão', text: 'Formar gerações de homens e mulheres que entrarão na sua herança, à medida que ensinamos a Palavra de Deus, para que cumpram o sonho de Deus.' },
+  { icon: Heart, title: 'O Nosso Propósito', text: 'Dar a conhecer Cristo e conduzir as pessoas à sua herança n’Ele. A Palavra de Deus ganhará vida no seu espírito enquanto adora connosco. A graça e a paz ser-vos-ão multiplicadas pelo conhecimento do nosso Senhor e Salvador Jesus Cristo.' },
 ];
 
 export default function AboutPage() {
@@ -53,37 +53,41 @@ export default function AboutPage() {
 
           <div className="space-y-8">
             <h2 className="text-4xl font-poppins font-bold text-navy leading-tight">
-              Dando um Sentido <br /> à Sua Vida
+              Nossa Doutrina
             </h2>
             <div className="w-20 h-1 bg-wine" />
             <p className="text-gray-600 text-lg leading-relaxed">
-              A Christ Embassy Angola é um braço vibrante da LoveWorld Incorporated, também conhecida como Believers' LoveWorld (BLW). 
-              Nossa visão é levar a presença divina de Deus às nações e aos povos do mundo e demonstrar o caráter do Espírito.
+              Deus levantou-nos através da Sua Palavra e do Seu Espírito para crermos na vida divina que Cristo nos trouxe (Tito 1:2-3; 2 Pedro 1:3-4).
             </p>
             <p className="text-gray-600 leading-relaxed">
-              Através de vários ministérios e plataformas, estamos alcançando milhões na nação portuguesa com o Evangelho de Jesus Cristo. 
-              Nossa igreja é mais do que apenas um lugar de culto; é uma família onde você é nutrido para crescer no conhecimento da Palavra de Deus 
-              e para cumprir o seu propósito divino.
+              Pela nossa fé na Sua Palavra, passámos a experimentar a realidade da vida divina. Essa vida, nos seus atributos, inclui: justiça, prosperidade, sucesso, abundância, vitória, saúde divina e a comunicação da própria vida e presença de Jesus Cristo aos povos do mundo.
             </p>
-            <div className="grid grid-cols-2 gap-8 pt-4">
-               <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-wine/10 rounded-full flex items-center justify-center text-wine">
-                    <Users size={24} />
-                  </div>
-                  <div>
-                    <p className="font-bold text-navy">Global</p>
-                    <p className="text-sm text-gray-500 font-medium uppercase">Comunidade</p>
-                  </div>
-               </div>
-               <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gold/10 rounded-full flex items-center justify-center text-gold">
-                    <BookOpen size={24} />
-                  </div>
-                  <div>
-                    <p className="font-bold text-navy">Sólida</p>
-                    <p className="text-sm text-gray-500 font-medium uppercase">Doutrina Bíblica</p>
-                  </div>
-               </div>
+            <p className="text-gray-600 leading-relaxed">
+              Fazemo-lo trazendo o maior número possível de homens e mulheres para fora das trevas, da servidão e da escravidão da ignorância, para que também eles possam desfrutar da gloriosa liberdade dos filhos de Deus.
+            </p>
+            
+            <div className="pt-4">
+              <h3 className="font-bold text-navy mb-4">Alcançamos estes objectivos através de:</h3>
+              <ul className="space-y-4">
+                 <li className="flex gap-4 items-start">
+                    <div className="min-w-10 w-10 h-10 bg-wine/10 rounded-full flex items-center justify-center text-wine shrink-0">
+                      <BookOpen size={20} />
+                    </div>
+                    <p className="text-gray-600">Ajudar as pessoas a desenvolver o seu espírito humano por meio da Palavra de Deus.</p>
+                 </li>
+                 <li className="flex gap-4 items-start">
+                    <div className="min-w-10 w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center text-gold shrink-0">
+                      <Target size={20} />
+                    </div>
+                    <p className="text-gray-600">Ensinar-lhes os princípios e ensinamentos da nova aliança no sangue de Jesus Cristo.</p>
+                 </li>
+                 <li className="flex gap-4 items-start">
+                    <div className="min-w-10 w-10 h-10 bg-navy/10 rounded-full flex items-center justify-center text-navy shrink-0">
+                      <Users size={20} />
+                    </div>
+                    <p className="text-gray-600">Prepará-las e capacitá-las para espalhar a Palavra e tocar outros, assim como elas próprias foram tocadas pela Palavra de Deus.</p>
+                 </li>
+              </ul>
             </div>
           </div>
         </div>
