@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Book, Download, Search, BookOpen, ExternalLink } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 
-const books = [
+const fallbackBooks = [
   {
     id: 1,
     title: 'O Poder da Sua Mente',
@@ -45,6 +46,28 @@ const books = [
 
 export default function LibraryPage() {
   const [searchTerm, setSearchTerm] = useState('');
+  const [books, setBooks] = useState<any[]>(fallbackBooks);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchBooks() {
+      try {
+        const { data, error } = await supabase
+          .from('books')
+          .select('*')
+          .order('created_at', { ascending: false });
+        
+        if (data && data.length > 0) {
+          setBooks(data);
+        }
+      } catch (err) {
+        console.error("Error fetching books:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchBooks();
+  }, []);
 
   const filteredBooks = books.filter(book => 
     book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||

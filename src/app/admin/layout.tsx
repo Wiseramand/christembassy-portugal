@@ -15,7 +15,8 @@ import {
   Menu,
   X,
   Church,
-  ChevronRight
+  ChevronRight,
+  Book
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -27,6 +28,7 @@ const sidebarLinks = [
   { name: 'Vídeos', href: '/admin/videos', icon: Video },
   { name: 'Testemunhos', href: '/admin/testimonials', icon: Users },
   { name: 'Doações', href: '/admin/donations', icon: Heart },
+  { name: 'Livraria', href: '/admin/books', icon: Book },
   { name: 'Mensagens', href: '/admin/messages', icon: MessageSquare },
   { name: 'Definições', href: '/admin/settings', icon: Settings },
 ];
@@ -94,7 +96,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </div>
             <div className="flex flex-col">
                <span className="font-poppins font-black text-navy text-lg block leading-tight tracking-tight">Painel</span>
-               <span className="text-[10px] uppercase font-bold text-gold tracking-[0.2em]">Angola</span>
+               <span className="text-[10px] uppercase font-bold text-gold tracking-[0.2em]">Portugal</span>
             </div>
           </Link>
         </div>
