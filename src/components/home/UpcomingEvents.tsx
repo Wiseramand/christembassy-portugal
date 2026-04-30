@@ -7,10 +7,10 @@ import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 
 const fallbackEvents = [
-  { id: '1', title: 'Super Domingo', date: '2026-04-26T10:00:00', location: 'Centro de Luanda', image_url: '/images/services.jpg' },
-  { id: '2', title: 'Santa Ceia Global', date: '2026-05-03T16:00:00', location: 'Arena LoveWorld', image_url: '/images/services.jpg' },
-  { id: '3', title: 'Canais de Cura', date: '2026-05-08T18:00:00', location: 'Global Online', image_url: '/images/services.jpg' },
-  { id: '4', title: 'Celebração de Domingo', date: '2026-05-31T09:00:00', location: 'Sede de Luanda', image_url: '/images/services.jpg' },
+  { id: '1', title: 'Santa Comunhão', date: '2026-05-03T10:00:00', location: 'Sede Local', image_url: '/images/services.jpg' },
+  { id: '2', title: 'Rhapaton', date: '2026-05-04T18:00:00', location: 'Global Online', image_url: '/images/services.jpg' },
+  { id: '3', title: 'Culto de Domingo', date: '2026-05-10T10:00:00', location: 'Sede Local', image_url: '/images/services.jpg' },
+  { id: '4', title: 'Culto de Quarta Feira', date: '2026-05-13T19:00:00', location: 'Sede Local', image_url: '/images/services.jpg' },
 ];
 
 export default function UpcomingEvents() {
@@ -50,7 +50,7 @@ export default function UpcomingEvents() {
           </Link>
         </div>
 
-        <div className="flex overflow-x-auto gap-8 pb-8 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <div className="flex overflow-x-auto lg:justify-center gap-8 pb-8 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {events.map((event, idx) => (
             <motion.div 
               key={event.id}
