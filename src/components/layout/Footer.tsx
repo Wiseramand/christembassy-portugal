@@ -9,10 +9,12 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           {/* Brand */}
           <div className="space-y-6">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-wine rounded-full flex items-center justify-center text-white font-bold">
-                CE
-              </div>
+            <Link href="/" className="flex items-center gap-3">
+              <img 
+                src="/images/logo.png" 
+                alt="Christ Embassy Logo" 
+                className="h-10 w-auto brightness-0 invert" 
+              />
               <span className="text-xl font-poppins font-bold tracking-tight">Christ Embassy PT</span>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed max-w-xs">

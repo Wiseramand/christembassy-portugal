@@ -40,11 +40,13 @@ export default function Navbar() {
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 group">
-          <div className="w-10 h-10 bg-wine rounded-full flex items-center justify-center text-white font-bold group-hover:scale-110 transition-transform">
-            CE
-          </div>
-          <div className="flex flex-col">
+        <Link href="/" className="flex items-center gap-4 group">
+          <img 
+            src="/images/logo.png" 
+            alt="Christ Embassy Logo" 
+            className="h-12 w-auto object-contain transition-transform group-hover:scale-105"
+          />
+          <div className="flex flex-col border-l border-gray-200/20 pl-4">
             <span className={cn(
               "text-xl font-poppins font-bold tracking-tight leading-none transition-colors",
               forceLight ? "text-navy" : "text-white"
