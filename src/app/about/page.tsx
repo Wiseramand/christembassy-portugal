@@ -125,12 +125,12 @@ export default function AboutPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center bg-navy rounded-3xl overflow-hidden shadow-2xl">
-           <div className="h-full aspect-square lg:aspect-auto">
-             <img 
-               src="https://images.unsplash.com/photo-1544427920-c49ccfb85579?auto=format&fit=crop&q=80&w=800"
-               alt="Pastor Chris"
-               className="w-full h-full object-cover"
-             />
+            <div className="h-full aspect-square lg:aspect-auto">
+              <img 
+                src="/images/pastorchris.jpg"
+                alt="Pastor Chris"
+                className="w-full h-full object-cover"
+              />
            </div>
            <div className="p-12 text-white">
               <h4 className="text-wine text-sm font-bold uppercase tracking-widest mb-4">Presidente e Fundador</h4>
