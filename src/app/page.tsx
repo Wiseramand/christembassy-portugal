@@ -14,50 +14,7 @@ export default function Home() {
     <div className="flex flex-col min-h-screen">
       <Hero />
 
-      {/* Pastor Welcome Section */}
-      <section className="py-24 bg-white overflow-hidden">
-        <div className="container mx-auto px-6">
-          <div className="flex flex-col lg:flex-row items-center gap-16">
-            <motion.div 
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="lg:w-1/2 relative"
-            >
-              <div className="absolute inset-0 bg-gold/10 rounded-3xl -rotate-3 scale-105" />
-              <img 
-                src="/images/pastor/charles-okorodudu.png" 
-                alt="Pastor Charles Okorodudu" 
-                className="relative z-10 rounded-3xl shadow-2xl w-full object-cover aspect-[4/5]"
-              />
-              <div className="absolute -bottom-6 -right-6 bg-wine text-white p-8 rounded-2xl shadow-xl z-20 hidden md:block">
-                <p className="font-poppins font-bold text-xl italic">&quot;Dando um sentido à sua vida&quot;</p>
-              </div>
-            </motion.div>
-            
-            <motion.div 
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="lg:w-1/2"
-            >
-              <h2 className="text-gold font-bold uppercase tracking-widest mb-4">Bem-vindo à Christ Embassy</h2>
-              <h3 className="text-4xl md:text-5xl font-poppins font-bold text-navy mb-8 leading-tight">
-                Uma Mensagem Especial do <br />
-                <span className="text-wine">Pastor Charles Okorodudu</span>
-              </h3>
-              <p className="text-gray-600 text-lg mb-10 leading-relaxed">
-                A nossa visão é levar a presença divina de Deus a todas as nações do mundo e demonstrar o caráter do Espírito Santo. 
-                Junte-se a nós nesta jornada de glória e descubra o plano extraordinário de Deus para si.
-              </p>
-              <Link href="/welcome" className="btn-gold px-10 py-4 text-lg inline-flex items-center gap-3 group">
-                Ler Mensagem de Boas-vindas
-                <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
-              </Link>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+
 
       {/* Live CTA Section */}
       <section className="bg-wine py-12 relative overflow-hidden">
