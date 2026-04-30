@@ -23,7 +23,7 @@ import Link from 'next/link';
 const sidebarLinks = [
   { name: 'Painel', href: '/admin', icon: LayoutDashboard },
   { name: 'Visitantes em Direto', href: '/admin/visitors', icon: Users },
-  { name: 'Controlo de Stream', href: '/admin/stream', icon: Video },
+  { name: 'Página Inicial / Hero', href: '/admin/stream', icon: Video },
   { name: 'Eventos', href: '/admin/events', icon: Calendar },
   { name: 'Vídeos', href: '/admin/videos', icon: Video },
   { name: 'Testemunhos', href: '/admin/testimonials', icon: MessageSquare },
