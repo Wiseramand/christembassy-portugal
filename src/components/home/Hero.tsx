@@ -42,9 +42,9 @@ export default function Hero() {
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/80 to-transparent z-10" />
         <img 
-          src="https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&q=80&w=2000" 
-          alt="Church Atmosphere"
-          className="w-full h-full object-cover opacity-40"
+          src="/images/pastorchris.jpg" 
+          alt="Pastor Chris Oyakhilome"
+          className="w-full h-full object-cover opacity-40 blur-[2px]"
         />
       </div>
 
