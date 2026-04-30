@@ -44,6 +44,8 @@ export default function VisitorsAdminPage() {
   const [totalCount, setTotalCount] = useState(0);
   const pageSize = 10;
 
+  const [viewerCount, setViewerCount] = useState(0);
+
   async function fetchVisitors() {
     setLoading(true);
     try {
@@ -93,6 +95,23 @@ export default function VisitorsAdminPage() {
 
   useEffect(() => {
     fetchVisitors();
+
+    // Sincronização em tempo real do contador de espectadores
+    const presenceChannel = supabase.channel('online-viewers', {
+      config: { presence: { key: 'admin' } }
+    });
+
+    presenceChannel
+      .on('presence', { event: 'sync' }, () => {
+        const newState = presenceChannel.presenceState();
+        const total = Object.values(newState).flat().length;
+        setViewerCount(total);
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(presenceChannel);
+    };
   }, [currentPage, filterRange]);
 
   const handleSearch = (e: React.FormEvent) => {
@@ -141,7 +160,15 @@ export default function VisitorsAdminPage() {
     <div className="space-y-8 pb-24">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h1 className="text-4xl font-poppins font-bold text-navy mb-2">Visitantes em Direto</h1>
+          <div className="flex items-center gap-3 mb-2">
+            <h1 className="text-4xl font-poppins font-bold text-navy">Visitantes</h1>
+            {viewerCount > 0 && (
+              <div className="flex items-center gap-2 bg-wine/10 text-wine px-3 py-1 rounded-full text-xs font-bold animate-pulse">
+                <span className="w-2 h-2 bg-wine rounded-full" />
+                {viewerCount} EM DIRETO AGORA
+              </div>
+            )}
+          </div>
           <p className="text-gray-500">Acompanhe quem assistiu às transmissões em tempo real.</p>
         </div>
         <div className="flex items-center gap-3">
