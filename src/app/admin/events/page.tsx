@@ -101,13 +101,13 @@ export default function EventsAdminPage() {
       const filePath = `events/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
-        .from('Livros')
+        .from('livros')
         .upload(filePath, file);
 
       if (uploadError) throw uploadError;
 
       const { data: { publicUrl } } = supabase.storage
-        .from('Livros')
+        .from('livros')
         .getPublicUrl(filePath);
 
       setFormData(prev => ({ ...prev, image_url: publicUrl }));

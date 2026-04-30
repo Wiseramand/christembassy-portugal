@@ -95,13 +95,13 @@ export default function VideosAdminPage() {
       const filePath = `videos/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
-        .from('Livros')
+        .from('livros')
         .upload(filePath, file);
 
       if (uploadError) throw uploadError;
 
       const { data: { publicUrl } } = supabase.storage
-        .from('Livros')
+        .from('livros')
         .getPublicUrl(filePath);
 
       setFormData(prev => ({ ...prev, thumbnail_url: publicUrl }));
