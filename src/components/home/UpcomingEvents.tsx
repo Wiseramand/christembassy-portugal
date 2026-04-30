@@ -58,7 +58,7 @@ export default function UpcomingEvents() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.1 }}
               viewport={{ once: true }}
-              className="group cursor-pointer min-w-[85vw] sm:min-w-[calc(50%-1rem)] lg:min-w-[calc(25%-1.5rem)] snap-start shrink-0"
+              className="group cursor-pointer w-[280px] snap-start shrink-0"
             >
               <div className="relative overflow-hidden rounded-3xl mb-6 aspect-square shadow-lg group-hover:shadow-2xl transition-all duration-500">
                 <img 
