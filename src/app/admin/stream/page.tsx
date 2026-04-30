@@ -16,7 +16,10 @@ export default function StreamControlPage() {
     id: '',
     is_live: false,
     m3u8_url: '',
-    mux_live_stream_id: '' // Added Mux ID field
+    mux_live_stream_id: '',
+    hero_video_url: '',
+    hero_title: '',
+    hero_subtitle: ''
   });
 
   useEffect(() => {
@@ -47,12 +50,15 @@ export default function StreamControlPage() {
         .update({
           is_live: settings.is_live,
           m3u8_url: settings.m3u8_url,
-          mux_live_stream_id: settings.mux_live_stream_id
+          mux_live_stream_id: settings.mux_live_stream_id,
+          hero_video_url: settings.hero_video_url,
+          hero_title: settings.hero_title,
+          hero_subtitle: settings.hero_subtitle
         })
         .eq('id', settings.id);
 
       if (error) throw error;
-      toast.success("Definições de stream atualizadas com sucesso!");
+      toast.success("Definições atualizadas com sucesso!");
     } catch (err: any) {
       toast.error("Falha na atualização: " + err.message);
     } finally {
@@ -98,12 +104,59 @@ export default function StreamControlPage() {
   return (
     <div className="max-w-4xl space-y-12 pb-24">
       <div>
-        <h1 className="text-4xl font-poppins font-bold text-navy mb-2">Controlo de Stream</h1>
-        <p className="text-gray-500">Gira o estado da sua transmissão em direto e as fontes do stream.</p>
+        <h1 className="text-4xl font-poppins font-bold text-navy mb-2">Controlo do Website</h1>
+        <p className="text-gray-500">Gira o stream em direto e os conteúdos de publicidade da página inicial.</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-8">
+          
+          {/* Hero Management Card */}
+          <div className="bg-white p-10 rounded-3xl shadow-sm border border-gray-100 space-y-8">
+            <div className="flex items-center gap-3 mb-4">
+               <div className="w-10 h-10 bg-gold/10 rounded-xl flex items-center justify-center text-gold">
+                  <PlayCircle size={20} />
+               </div>
+               <h2 className="text-xl font-bold font-poppins text-navy">Publicidade do Hero (Início)</h2>
+            </div>
+
+            <div className="space-y-6">
+               <div className="space-y-2">
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Título do Hero</label>
+                  <input
+                    type="text"
+                    value={settings.hero_title}
+                    onChange={(e) => setSettings({ ...settings, hero_title: e.target.value })}
+                    placeholder="Ex: Dando um sentido à sua vida"
+                    className="w-full bg-off-white p-4 rounded-xl outline-none border-2 border-transparent focus:border-gold transition-all font-bold"
+                  />
+               </div>
+
+               <div className="space-y-2">
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Subtítulo / Descrição</label>
+                  <textarea
+                    rows={3}
+                    value={settings.hero_subtitle}
+                    onChange={(e) => setSettings({ ...settings, hero_subtitle: e.target.value })}
+                    placeholder="Breve descrição sobre a igreja ou evento..."
+                    className="w-full bg-off-white p-4 rounded-xl outline-none border-2 border-transparent focus:border-gold transition-all text-sm"
+                  />
+               </div>
+
+               <div className="space-y-2">
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">URL do Vídeo (MP4)</label>
+                  <input
+                    type="text"
+                    value={settings.hero_video_url}
+                    onChange={(e) => setSettings({ ...settings, hero_video_url: e.target.value })}
+                    placeholder="URL para o vídeo .mp4..."
+                    className="w-full bg-off-white p-4 rounded-xl outline-none border-2 border-transparent focus:border-gold transition-all font-mono text-sm"
+                  />
+                  <p className="text-[10px] text-gray-400 italic">Pode usar um link direto (ex: Cloudinary, Dropbox link direto) ou o caminho local (/videos/video.mp4).</p>
+               </div>
+            </div>
+          </div>
+
           {/* Mux Quick Sync Card */}
           <div className="bg-navy text-white p-8 rounded-3xl shadow-xl relative overflow-hidden group">
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-700" />
@@ -112,7 +165,7 @@ export default function StreamControlPage() {
                 <div className="w-10 h-10 bg-gold rounded-xl flex items-center justify-center text-navy">
                   <Zap size={20} fill="currentColor" />
                 </div>
-                <h2 className="text-xl font-bold font-poppins">Integração Mux</h2>
+                <h2 className="text-xl font-bold font-poppins">Integração Mux (Stream)</h2>
               </div>
 
               <div className="space-y-4">
@@ -131,12 +184,9 @@ export default function StreamControlPage() {
                     className="bg-gold text-navy px-6 py-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-white transition-all disabled:opacity-50"
                   >
                     {syncing ? <RefreshCw className="animate-spin" size={20} /> : <RefreshCw size={20} />}
-                    SINCRONIZAR ESTADO
+                    SINCRONIZAR
                   </button>
                 </div>
-                <p className="text-[10px] text-gray-400 italic">
-                  A sincronização irá atualizar o "Estado em Direto" e o "URL M3U8" automaticamente com base no seu painel Mux.
-                </p>
               </div>
             </div>
           </div>

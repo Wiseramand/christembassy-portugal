@@ -1,13 +1,33 @@
 "use client";
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Play, Heart, ChevronRight, Volume2, VolumeX } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 
 export default function Hero() {
   const [isMuted, setIsMuted] = useState(true);
+  const [settings, setSettings] = useState({
+    hero_video_url: '/videos/IPPC.mp4',
+    hero_title: 'Dando um sentido à sua vida',
+    hero_subtitle: 'Experimente o poder da Palavra de Deus e o calor de uma família amorosa.'
+  });
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    async function fetchSettings() {
+      const { data } = await supabase.from('stream_settings').select('*').single();
+      if (data) {
+        setSettings({
+          hero_video_url: data.hero_video_url || '/videos/IPPC.mp4',
+          hero_title: data.hero_title || 'Dando um sentido à sua vida',
+          hero_subtitle: data.hero_subtitle || 'Experimente o poder da Palavra de Deus e o calor de uma família amorosa.'
+        });
+      }
+    }
+    fetchSettings();
+  }, []);
 
   const toggleMute = () => {
     if (videoRef.current) {
@@ -50,13 +70,16 @@ export default function Hero() {
             </motion.div>
 
             <h1 className="text-5xl md:text-7xl font-poppins font-bold text-white leading-tight mb-6">
-              Dando um sentido <br />
-              <span className="text-gold">à sua vida</span>
+              {settings.hero_title.split('<br />').map((line, i) => (
+                <React.Fragment key={i}>
+                  {line}
+                  {i === 0 && <br />}
+                </React.Fragment>
+              ))}
             </h1>
             
             <p className="text-lg text-gray-300 leading-relaxed mb-10 max-w-lg">
-              Experimente o poder da Palavra de Deus e o calor de uma família amorosa. 
-              Junte-se ao Pastor Chris e à família global LoveWorld no cumprimento do propósito de Deus para a sua vida.
+              {settings.hero_subtitle}
             </p>
 
             <div className="flex flex-wrap gap-4">
@@ -86,8 +109,9 @@ export default function Hero() {
           >
             <div className="relative z-10 rounded-2xl overflow-hidden border-4 border-gold/30 shadow-2xl group">
               <video 
+                key={settings.hero_video_url}
                 ref={videoRef}
-                src="/videos/IPPC.mp4" 
+                src={settings.hero_video_url} 
                 className="w-full h-auto object-cover aspect-[4/3] md:aspect-auto"
                 autoPlay
                 muted
