@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 const navLinks = [
   { name: 'Início', href: '/' },
   { name: 'Sobre Nós', href: '/about' },
+  { name: 'Livraria', href: '/library' },
   { name: 'Testemunhos', href: '/testimonials' },
   { name: 'Contacto', href: '/contact' },
 ];
@@ -50,7 +51,7 @@ export default function Navbar() {
             )}>
               Christ Embassy
             </span>
-            <span className="text-xs font-medium text-gold uppercase tracking-widest">Angola</span>
+            <span className="text-xs font-medium text-gold uppercase tracking-widest">Portugal</span>
           </div>
         </Link>
 
