@@ -5,20 +5,26 @@ import { supabase } from '@/lib/supabase';
 import { motion } from 'framer-motion';
 import { 
   Users, 
-  Download, 
   Search, 
   Calendar, 
-  Filter, 
   ChevronLeft, 
   ChevronRight,
   FileText,
   Table as TableIcon,
-  RefreshCw
+  RefreshCw,
+  Globe,
+  Phone
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
+
+declare module 'jspdf' {
+  interface jsPDF {
+    autoTable: (options: any) => jsPDF;
+  }
+}
 
 interface Visitor {
   id: string;
@@ -104,10 +110,10 @@ export default function VisitorsAdminPage() {
       v.phone,
       v.country,
       v.city,
-      new Date(v.created_at).toLocaleDateString()
+      v.created_at ? new Date(v.created_at).toLocaleDateString('pt-PT') : ''
     ]);
 
-    autoTable(doc, {
+    doc.autoTable({
       head: [['Nome', 'Telefone', 'País', 'Cidade', 'Data']],
       body: tableData,
       startY: 20,
@@ -122,7 +128,7 @@ export default function VisitorsAdminPage() {
       Telefone: v.phone,
       País: v.country,
       Cidade: v.city,
-      Data: new Date(v.created_at).toLocaleString()
+      Data: v.created_at ? new Date(v.created_at).toLocaleString('pt-PT') : ''
     })));
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Visitantes");

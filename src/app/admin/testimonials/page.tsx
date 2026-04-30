@@ -37,6 +37,7 @@ export default function TestimonialsAdminPage() {
 
   const [formData, setFormData] = useState({
     name: '',
+    role: 'Membro',
     text: '',
     image_url: ''
   });
@@ -56,10 +57,10 @@ export default function TestimonialsAdminPage() {
   const handleOpenModal = (t?: Testimonial) => {
     if (t) {
       setEditing(t);
-      setFormData({ name: t.name, text: t.text, image_url: t.image_url });
+      setFormData({ name: t.name, role: t.role, text: t.text, image_url: t.image_url });
     } else {
       setEditing(null);
-      setFormData({ name: '', text: '', image_url: '' });
+      setFormData({ name: '', role: 'Membro', text: '', image_url: '' });
     }
     setIsModalOpen(true);
   };
@@ -147,7 +148,10 @@ export default function TestimonialsAdminPage() {
                 <p className="text-sm text-gray-500 italic mb-6 line-clamp-4 flex-grow">&quot;{t.text}&quot;</p>
                 <div className="flex items-center gap-4">
                    <img src={t.image_url} className="w-10 h-10 rounded-full object-cover" alt={t.name} />
-                   <h4 className="font-bold text-navy">{t.name}</h4>
+                    <div className="flex flex-col">
+                      <h4 className="font-bold text-navy leading-none mb-1">{t.name}</h4>
+                      <p className="text-[10px] text-wine font-bold uppercase tracking-widest">{t.role}</p>
+                    </div>
                 </div>
              </motion.div>
            ))}
@@ -162,9 +166,15 @@ export default function TestimonialsAdminPage() {
                <h2 className="text-2xl font-poppins font-bold text-navy">{editing ? 'Editar' : 'Adicionar'} Testemunho</h2>
                
                <form onSubmit={handleSave} className="space-y-4">
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Nome da Pessoa</label>
-                    <input required placeholder="Ex: João Silva" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full bg-off-white p-4 rounded-xl outline-none" />
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Nome da Pessoa</label>
+                      <input required placeholder="Ex: João Silva" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full bg-off-white p-4 rounded-xl outline-none" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Papel / Cargo</label>
+                      <input required placeholder="Ex: Empresário" value={formData.role} onChange={e => setFormData({...formData, role: e.target.value})} className="w-full bg-off-white p-4 rounded-xl outline-none" />
+                    </div>
                   </div>
 
                   {/* Profile Upload */}
