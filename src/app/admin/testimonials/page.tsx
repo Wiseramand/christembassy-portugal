@@ -72,13 +72,13 @@ export default function TestimonialsAdminPage() {
       const filePath = `profiles/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
-        .from('LIVROS')
+        .from('books')
         .upload(filePath, file);
 
       if (uploadError) throw uploadError;
 
       const { data: { publicUrl } } = supabase.storage
-        .from('LIVROS')
+        .from('books')
         .getPublicUrl(filePath);
 
       setFormData(prev => ({ ...prev, image_url: publicUrl }));
