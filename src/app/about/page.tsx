@@ -42,8 +42,8 @@ export default function AboutPage() {
           <div className="relative">
             <div className="aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl relative z-10">
                <img 
-                 src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=800" 
-                 alt="Edifício da Igreja"
+                 src="/images/Pastorchris.jpg" 
+                 alt="Pastor Chris"
                  className="w-full h-full object-cover"
                />
             </div>
@@ -159,7 +159,7 @@ export default function AboutPage() {
            <h3 className="text-4xl font-poppins font-bold mb-6">Faça parte da nossa Família</h3>
            <p className="text-white/70 max-w-xl mx-auto mb-10">
              Quer seja novo na zona ou esteja à procura de uma casa espiritual, 
-             há um lugar para si aqui na Christ Embassy Angola.
+             há um lugar para si aqui na Christ Embassy Portugal.
            </p>
            <div className="flex flex-wrap justify-center gap-4">
               <Link href="/watch" className="bg-white text-wine px-10 py-4 rounded-full font-bold hover:bg-gold hover:text-navy transition-all">

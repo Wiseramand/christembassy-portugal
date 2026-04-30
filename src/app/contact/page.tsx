@@ -2,21 +2,13 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Send, Phone, Mail, MapPin, MessageSquare, CheckCircle2, Church } from 'lucide-react';
+import { Send, Phone, Mail, MapPin, MessageSquare, CheckCircle2, Church, Clock } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/lib/supabase';
 
 const OTHER_CHURCHES = [
-  { name: 'Christ Embassy Benfica (Central)', address: 'Benfica, Luanda, Angola', phone: '+244 000 000 000' },
-  { name: 'Christ Embassy Camama', address: 'Camama, Luanda, Angola', phone: '+244 000 000 000' },
-  { name: 'Christ Embassy Cassenda', address: 'Cassenda, Luanda, Angola', phone: '+244 000 000 000' },
-  { name: 'Christ Embassy Zango', address: 'Zango, Luanda, Angola', phone: '+244 000 000 000' },
-  { name: 'Christ Embassy Lubango', address: 'Lubango, Huíla, Angola', phone: '+244 000 000 000' },
-  { name: 'Christ Embassy Lubango 2', address: 'Lubango, Huíla, Angola', phone: '+244 000 000 000' },
-  { name: 'Christ Embassy Cunene', address: 'Ondjiva, Cunene, Angola', phone: '+244 000 000 000' },
-  { name: 'Christ Embassy Cabinda', address: 'Cabinda, Angola', phone: '+244 000 000 000' },
-  { name: 'Christ Embassy Huambo', address: 'Huambo, Angola', phone: '+244 000 000 000' },
-  { name: 'Christ Embassy Virei', address: 'Virei, Namibe, Angola', phone: '+244 000 000 000' },
+  { name: 'Christ Embassy Odivelas', address: 'RUA HEROIS DE CHAIMITE, N 21, LT D. CP: 2675-376 ODIVELAS', phone: '+351 000 000 000' },
+  { name: 'Christ Embassy Setúbal', address: 'Rua General Daniel de Sousa 116, 2900-344 Setúbal', phone: '+351 000 000 000' },
 ];
 
 export default function ContactPage() {
@@ -26,7 +18,7 @@ export default function ContactPage() {
     name: '',
     email: '',
     phone: '',
-    church: 'Christ Embassy Benfica (Central)',
+    church: 'Christ Embassy Odivelas',
     message: ''
   });
 
@@ -45,7 +37,7 @@ export default function ContactPage() {
         description: "Entraremos em contacto brevemente."
       });
       setSubmitted(true);
-      setFormData({ name: '', email: '', phone: '', church: 'Christ Embassy Benfica (Central)', message: '' });
+      setFormData({ name: '', email: '', phone: '', church: 'Christ Embassy Odivelas', message: '' });
     } catch (err: any) {
       console.error("Error sending message:", err);
       toast.error("Falha ao enviar mensagem", {
@@ -101,9 +93,9 @@ export default function ContactPage() {
               
               <div className="space-y-6">
                 {[
-                  { icon: MapPin, title: 'Localização', detail: 'Luanda, Angola', sub: 'Centro de Ministério Principal' },
+                  { icon: MapPin, title: 'Localização', detail: 'Odivelas & Setúbal', sub: 'Igrejas Locais' },
+                  { icon: Clock, title: 'Horários dos Cultos', detail: 'Domingos às 10h', sub: 'Qua: 19h | Sex (Intercessão): 19h' },
                   { icon: Phone, title: 'Ligue-nos', detail: '+351 000 000 000', sub: 'Seg-Sex, 9h - 17h' },
-                  { icon: Mail, title: 'Email', detail: 'contact@ceangola.ao', sub: 'Informações Gerais' },
                 ].map((item, i) => (
                   <motion.div 
                     key={i}
