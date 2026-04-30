@@ -2,51 +2,24 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Book, Download, Search, BookOpen, ExternalLink } from 'lucide-react';
+import { Book, Download, Search, BookOpen, ExternalLink, Eye } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 
 const fallbackBooks = [
   {
-    id: 1,
+    id: 'fb1',
     title: 'O Poder da Sua Mente',
     author: 'Pastor Chris Oyakhilome',
     description: 'Acredite na vida divina que Cristo trouxe. Este livro ensina-o a usar a sua mente para mudar as circunstâncias da sua vida.',
-    image: '/images/services.jpg', // Placeholder
+    image_url: '/images/services.jpg', 
     pdf_url: '#',
     category: 'Crescimento Espiritual'
-  },
-  {
-    id: 2,
-    title: 'Como Rezar Eficazmente',
-    author: 'Pastor Chris Oyakhilome',
-    description: 'Descubra os princípios vitais da oração eficaz que produz resultados e muda o mundo ao seu redor.',
-    image: '/images/services.jpg', // Placeholder
-    pdf_url: '#',
-    category: 'Oração'
-  },
-  {
-    id: 3,
-    title: 'O Teu Espírito Recreativo',
-    author: 'Pastor Chris Oyakhilome',
-    description: 'Entenda a natureza do seu espírito humano e como ele pode ser recriado pela Palavra de Deus.',
-    image: '/images/services.jpg', // Placeholder
-    pdf_url: '#',
-    category: 'Identidade em Cristo'
-  },
-  {
-    id: 4,
-    title: 'A Porta Para A Glória',
-    author: 'Pastor Chris Oyakhilome',
-    description: 'Aprenda como a meditação na Palavra de Deus é a chave para viver na glória de Deus diariamente.',
-    image: '/images/services.jpg', // Placeholder
-    pdf_url: '#',
-    category: 'Meditação'
   }
 ];
 
 export default function LibraryPage() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [books, setBooks] = useState<any[]>(fallbackBooks);
+  const [books, setBooks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -59,9 +32,12 @@ export default function LibraryPage() {
         
         if (data && data.length > 0) {
           setBooks(data);
+        } else {
+          setBooks(fallbackBooks);
         }
       } catch (err) {
         console.error("Error fetching books:", err);
+        setBooks(fallbackBooks);
       } finally {
         setLoading(false);
       }
@@ -70,8 +46,8 @@ export default function LibraryPage() {
   }, []);
 
   const filteredBooks = books.filter(book => 
-    book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    book.category.toLowerCase().includes(searchTerm.toLowerCase())
+    (book.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    book.category?.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   return (
@@ -114,58 +90,74 @@ export default function LibraryPage() {
 
       {/* Books Grid */}
       <section className="py-24 container mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {filteredBooks.map((book, idx) => (
-            <motion.div 
-              key={book.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.1 }}
-              className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl border border-gray-100 transition-all group flex flex-col h-full"
-            >
-              {/* Book Cover Placeholder */}
-              <div className="aspect-[3/4] bg-navy relative overflow-hidden">
-                 <img 
-                   src={book.image} 
-                   alt={book.title}
-                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-60"
-                 />
-                 <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
-                    <BookOpen size={48} className="text-gold mb-4 opacity-40" />
-                    <span className="text-white font-poppins font-bold text-lg leading-tight">{book.title}</span>
-                    <span className="text-gold/80 text-xs mt-2 uppercase tracking-widest">{book.category}</span>
-                 </div>
-                 <div className="absolute top-4 right-4">
-                    <span className="bg-wine text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-tighter shadow-lg">PDF</span>
-                 </div>
-              </div>
-
-              <div className="p-6 flex flex-col flex-grow">
-                <h3 className="text-xl font-poppins font-bold text-navy mb-2 line-clamp-1">{book.title}</h3>
-                <p className="text-gray-400 text-xs font-medium mb-4">Por {book.author}</p>
-                <p className="text-gray-500 text-sm leading-relaxed mb-6 line-clamp-3">
-                  {book.description}
-                </p>
-                
-                <div className="mt-auto pt-6 border-t border-gray-50 flex items-center justify-between">
-                  <button className="flex items-center gap-2 text-wine font-bold text-sm hover:gap-3 transition-all">
-                    Ler Mais <ExternalLink size={14} />
-                  </button>
-                  <a 
-                    href={book.pdf_url}
-                    className="w-10 h-10 bg-gold/10 rounded-xl flex items-center justify-center text-gold hover:bg-gold hover:text-navy transition-all"
-                    title="Descarregar PDF"
-                  >
-                    <Download size={18} />
-                  </a>
+        {loading ? (
+           <div className="flex flex-col items-center justify-center py-24">
+              <div className="w-12 h-12 border-4 border-navy/10 border-t-gold rounded-full animate-spin mb-4" />
+              <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">A carregar biblioteca...</p>
+           </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {filteredBooks.map((book, idx) => (
+              <motion.div 
+                key={book.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl border border-gray-100 transition-all group flex flex-col h-full"
+              >
+                {/* Book Cover */}
+                <div className="aspect-[3/4] bg-navy relative overflow-hidden">
+                   <img 
+                     src={book.image_url || '/images/services.jpg'} 
+                     alt={book.title}
+                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-60"
+                   />
+                   <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-black/20 group-hover:bg-black/40 transition-colors">
+                      <BookOpen size={48} className="text-gold mb-4 opacity-40 group-hover:opacity-100 transition-opacity" />
+                      <span className="text-white font-poppins font-bold text-lg leading-tight drop-shadow-md">{book.title}</span>
+                      <span className="text-gold/90 text-[10px] mt-2 uppercase tracking-widest font-bold">{book.category}</span>
+                   </div>
+                   <div className="absolute top-4 right-4">
+                      <span className="bg-wine text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-tighter shadow-lg">PDF</span>
+                   </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
 
-        {filteredBooks.length === 0 && (
+                <div className="p-8 flex flex-col flex-grow">
+                  <h3 className="text-xl font-poppins font-bold text-navy mb-2 line-clamp-1">{book.title}</h3>
+                  <p className="text-gray-400 text-xs font-medium mb-4 uppercase tracking-widest">Por {book.author}</p>
+                  <p className="text-gray-500 text-sm leading-relaxed mb-8 line-clamp-3">
+                    {book.description}
+                  </p>
+                  
+                  <div className="mt-auto pt-6 border-t border-gray-100 flex items-center justify-between gap-4">
+                    <a 
+                      href={book.pdf_url} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex-grow flex items-center justify-center gap-2 bg-navy text-white py-3 rounded-xl font-bold text-sm hover:bg-wine transition-all"
+                    >
+                      <Eye size={16} />
+                      Ler Agora
+                    </a>
+                    <a 
+                      href={book.pdf_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      download
+                      className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center text-gold hover:bg-gold hover:text-navy transition-all shrink-0"
+                      title="Descarregar PDF"
+                    >
+                      <Download size={20} />
+                    </a>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
+
+        {!loading && filteredBooks.length === 0 && (
           <div className="text-center py-24">
              <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6 text-gray-400">
                 <Search size={32} />
@@ -186,10 +178,15 @@ export default function LibraryPage() {
                      <p className="text-white/70 text-lg leading-relaxed">
                         Descarregue a edição deste mês do nosso devocional diário e transforme a sua vida com revelações frescas da Palavra de Deus todos os dias.
                      </p>
-                     <button className="bg-gold text-navy px-10 py-4 rounded-full font-bold hover:bg-white transition-all flex items-center gap-3">
+                     <a 
+                       href="https://rhapsodyofrealities.org" 
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                       className="bg-gold text-navy px-10 py-4 rounded-full font-bold hover:bg-white transition-all inline-flex items-center gap-3"
+                     >
                         Descarregar Edição Atual
                         <Download size={20} />
-                     </button>
+                     </a>
                   </div>
                   <div className="relative hidden lg:block">
                      <div className="w-64 h-80 bg-white/10 rounded-3xl mx-auto rotate-6 border border-white/20 backdrop-blur-md flex items-center justify-center">
