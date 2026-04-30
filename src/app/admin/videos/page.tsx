@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -12,7 +12,11 @@ import {
   Save, 
   Play, 
   Link as LinkIcon,
-  Tag
+  Tag,
+  Upload,
+  Loader2,
+  CheckCircle2,
+  Image as ImageIcon
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -30,12 +34,15 @@ export default function VideosAdminPage() {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingVideo, setEditingVideo] = useState<VOD | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const [formData, setFormData] = useState({
     title: '',
     url: '',
     thumbnail_url: '',
     duration: '',
-    category: 'Teaching'
+    category: 'Ensino'
   });
 
   async function fetchVideos() {
@@ -80,6 +87,32 @@ export default function VideosAdminPage() {
     setIsModalOpen(true);
   };
 
+  const handleImageUpload = async (file: File) => {
+    try {
+      setIsUploading(true);
+      const fileExt = file.name.split('.').pop();
+      const fileName = `video-${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+      const filePath = `videos/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('books')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('books')
+        .getPublicUrl(filePath);
+
+      setFormData(prev => ({ ...prev, thumbnail_url: publicUrl }));
+      toast.success("Miniatura carregada!");
+    } catch (error: any) {
+      toast.error(`Erro no upload: ${error.message}`);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     const payload = {
@@ -120,7 +153,7 @@ export default function VideosAdminPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
            <h1 className="text-4xl font-poppins font-bold text-navy mb-2">Gestão de Vídeos</h1>
-           <p className="text-gray-500">Gira a sua biblioteca de Vídeo-On-Demand e séries de ensino.</p>
+           <p className="text-gray-500">Gira a sua biblioteca de Vídeo-On-Demand e ensinamentos.</p>
         </div>
         <button 
           onClick={() => handleOpenModal()}
@@ -213,17 +246,51 @@ export default function VideosAdminPage() {
                         type="text"
                         value={formData.title}
                         onChange={(e) => setFormData({...formData, title: e.target.value})}
-                        className="w-full bg-off-white p-4 rounded-xl outline-none"
+                        className="w-full bg-off-white p-4 rounded-xl outline-none border-2 border-transparent focus:border-gold transition-all"
                      />
                   </div>
 
+                  {/* Thumbnail Upload */}
                   <div className="space-y-2">
-                     <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">URL do YouTube / Vídeo</label>
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Miniatura do Vídeo (Thumbnail)</label>
+                    <input 
+                      type="file" 
+                      accept="image/*"
+                      ref={fileInputRef}
+                      onChange={(e) => e.target.files?.[0] && handleImageUpload(e.target.files[0])}
+                      className="hidden" 
+                    />
+                    <button 
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={isUploading}
+                      className={`w-full p-6 rounded-xl border-2 border-dashed flex flex-col items-center justify-center gap-2 transition-all ${
+                        formData.thumbnail_url 
+                          ? 'border-green-200 bg-green-50 text-green-700' 
+                          : 'border-gray-200 bg-gray-50 text-gray-400 hover:border-gold hover:bg-gold/5'
+                      }`}
+                    >
+                       {isUploading ? (
+                         <Loader2 className="animate-spin text-gold" size={28} />
+                       ) : formData.thumbnail_url ? (
+                         <CheckCircle2 size={28} />
+                       ) : (
+                         <Upload size={28} />
+                       )}
+                       <span className="font-bold uppercase tracking-wider text-xs">
+                         {isUploading ? 'A carregar...' : formData.thumbnail_url ? 'Capa Pronta' : 'Carregar Imagem de Capa'}
+                       </span>
+                    </button>
+                 </div>
+
+                  <div className="space-y-2">
+                     <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Link do Vídeo (Mux/YouTube)</label>
                      <div className="relative">
                         <LinkIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" size={18} />
                         <input 
                            required
                            type="text"
+                           placeholder="https://..."
                            value={formData.url}
                            onChange={(e) => setFormData({...formData, url: e.target.value})}
                            className="w-full bg-off-white p-4 pl-12 rounded-xl outline-none"
@@ -258,20 +325,14 @@ export default function VideosAdminPage() {
                      </div>
                   </div>
 
-                  <div className="space-y-2">
-                     <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">URL da Miniatura (Opcional)</label>
-                     <input 
-                        type="text"
-                        value={formData.thumbnail_url}
-                        onChange={(e) => setFormData({...formData, thumbnail_url: e.target.value})}
-                        className="w-full bg-off-white p-4 rounded-xl outline-none"
-                     />
-                  </div>
-
                   <div className="pt-6 flex gap-4">
-                     <button type="submit" className="w-full bg-navy text-white p-4 rounded-xl font-bold hover:bg-wine transition-all flex items-center justify-center gap-2">
+                     <button 
+                        type="submit" 
+                        disabled={isUploading}
+                        className="w-full bg-navy text-white p-4 rounded-xl font-bold hover:bg-wine transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                      >
                         <Save size={18} />
-                        Guardar Vídeo
+                        Publicar Vídeo
                      </button>
                   </div>
                </form>

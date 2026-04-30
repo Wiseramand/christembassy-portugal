@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -14,7 +14,10 @@ import {
   X,
   MapPin,
   Clock,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Upload,
+  Loader2,
+  CheckCircle2
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -32,6 +35,9 @@ export default function EventsAdminPage() {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState<ChurchEvent | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -87,6 +93,32 @@ export default function EventsAdminPage() {
     setIsModalOpen(true);
   };
 
+  const handleImageUpload = async (file: File) => {
+    try {
+      setIsUploading(true);
+      const fileExt = file.name.split('.').pop();
+      const fileName = `event-${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+      const filePath = `events/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('books') // Reusing the same bucket as requested "mesmo upload"
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('books')
+        .getPublicUrl(filePath);
+
+      setFormData(prev => ({ ...prev, image_url: publicUrl }));
+      toast.success("Imagem carregada!");
+    } catch (error: any) {
+      toast.error(`Erro no upload: ${error.message}`);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     const combinedDate = `${formData.date}T${formData.time}:00`;
@@ -117,7 +149,7 @@ export default function EventsAdminPage() {
       setIsModalOpen(false);
       fetchEvents();
     } catch (err: any) {
-      toast.error("Falha na atualização: " + err.message);
+      toast.error("Falha na operação: " + err.message);
     }
   };
 
@@ -137,7 +169,7 @@ export default function EventsAdminPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
            <h1 className="text-4xl font-poppins font-bold text-navy mb-2">Gestão de Eventos</h1>
-           <p className="text-gray-500">Planeie e gira os próximos serviços, conferências e reuniões.</p>
+           <p className="text-gray-500">Planeie e gira os próximos serviços e conferências.</p>
         </div>
         <button 
           onClick={() => handleOpenModal()}
@@ -157,7 +189,7 @@ export default function EventsAdminPage() {
          <div className="bg-white p-20 rounded-3xl text-center border-2 border-dashed border-gray-100">
             <Calendar className="mx-auto mb-6 text-gray-100" size={80} />
             <h3 className="text-xl font-poppins font-bold text-navy mb-2">Nenhum Evento Encontrado</h3>
-            <p className="text-gray-500 mb-8 max-w-sm mx-auto">Comece por criar o seu primeiro evento da igreja para o exibir na página inicial.</p>
+            <p className="text-gray-500 mb-8 max-w-sm mx-auto">Comece por criar o seu primeiro evento.</p>
             <button onClick={() => handleOpenModal()} className="btn-primary">Começar</button>
          </div>
       ) : (
@@ -251,6 +283,39 @@ export default function EventsAdminPage() {
                     />
                  </div>
 
+                 {/* Image Upload */}
+                 <div className="space-y-2">
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Cartaz / Imagem do Evento</label>
+                    <input 
+                      type="file" 
+                      accept="image/*"
+                      ref={fileInputRef}
+                      onChange={(e) => e.target.files?.[0] && handleImageUpload(e.target.files[0])}
+                      className="hidden" 
+                    />
+                    <button 
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={isUploading}
+                      className={`w-full p-8 rounded-xl border-2 border-dashed flex flex-col items-center justify-center gap-2 transition-all ${
+                        formData.image_url 
+                          ? 'border-green-200 bg-green-50 text-green-700' 
+                          : 'border-gray-200 bg-gray-50 text-gray-400 hover:border-wine hover:bg-wine/5'
+                      }`}
+                    >
+                       {isUploading ? (
+                         <Loader2 className="animate-spin text-wine" size={32} />
+                       ) : formData.image_url ? (
+                         <CheckCircle2 size={32} />
+                       ) : (
+                         <Upload size={32} />
+                       )}
+                       <span className="font-bold uppercase tracking-wider text-sm">
+                         {isUploading ? 'A carregar...' : formData.image_url ? 'Imagem Pronta' : 'Selecionar Imagem do Computador'}
+                       </span>
+                    </button>
+                 </div>
+
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                        <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Data</label>
@@ -287,7 +352,7 @@ export default function EventsAdminPage() {
                        <input 
                          required
                          type="text"
-                         placeholder="Auditório Principal de Luanda"
+                         placeholder="Odivelas / Setúbal / Online"
                          value={formData.location}
                          onChange={(e) => setFormData({...formData, location: e.target.value})}
                          className="w-full bg-off-white p-4 pl-12 rounded-xl outline-none"
@@ -296,24 +361,10 @@ export default function EventsAdminPage() {
                  </div>
 
                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">URL da Imagem</label>
-                    <div className="relative">
-                       <ImageIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" size={18} />
-                       <input 
-                         type="text"
-                         placeholder="https://images.unsplash.com/..."
-                         value={formData.image_url}
-                         onChange={(e) => setFormData({...formData, image_url: e.target.value})}
-                         className="w-full bg-off-white p-4 pl-12 rounded-xl outline-none"
-                       />
-                    </div>
-                 </div>
-
-                 <div className="space-y-2">
                     <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Descrição</label>
                     <textarea 
-                      rows={4}
-                      placeholder="Conte às pessoas mais sobre este evento..."
+                      rows={3}
+                      placeholder="Conte mais sobre este evento..."
                       value={formData.description}
                       onChange={(e) => setFormData({...formData, description: e.target.value})}
                       className="w-full bg-off-white p-4 rounded-xl outline-none focus:ring-2 focus:ring-wine/20 border-2 border-transparent focus:border-wine transition-all resize-none"
@@ -330,7 +381,8 @@ export default function EventsAdminPage() {
                     </button>
                     <button 
                       type="submit"
-                      className="w-2/3 bg-navy text-white p-4 rounded-xl font-bold hover:bg-wine transition-all flex items-center justify-center gap-2 shadow-lg"
+                      disabled={isUploading}
+                      className="w-2/3 bg-navy text-white p-4 rounded-xl font-bold hover:bg-wine transition-all flex items-center justify-center gap-2 shadow-lg disabled:opacity-50"
                     >
                        <Save size={18} />
                        {editingEvent ? 'Guardar Alterações' : 'Criar Evento'}
