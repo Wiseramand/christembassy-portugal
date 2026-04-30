@@ -42,7 +42,7 @@ export default function AboutPage() {
           <div className="relative">
             <div className="aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl relative z-10">
                <img 
-                 src="/images/Pastorchris.jpg" 
+                 src="/images/pastorchris.jpg" 
                  alt="Pastor Chris"
                  className="w-full h-full object-cover"
                />
