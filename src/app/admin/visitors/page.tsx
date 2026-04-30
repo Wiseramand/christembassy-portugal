@@ -58,20 +58,23 @@ export default function VisitorsAdminPage() {
         query = query.or(`name.ilike.%${searchTerm}%,country.ilike.%${searchTerm}%,city.ilike.%${searchTerm}%`);
       }
 
-      // Apply Date Filter
+      // Apply Date Filter with fresh dates
       const now = new Date();
       if (filterRange === 'day') {
-        const startOfDay = new Date(now.setHours(0, 0, 0, 0)).toISOString();
-        query = query.gte('created_at', startOfDay);
+        const start = new Date(now);
+        start.setHours(0, 0, 0, 0);
+        query = query.gte('created_at', start.toISOString());
       } else if (filterRange === 'week') {
-        const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay())).toISOString();
-        query = query.gte('created_at', startOfWeek);
+        const start = new Date(now);
+        start.setDate(now.getDate() - now.getDay());
+        start.setHours(0, 0, 0, 0);
+        query = query.gte('created_at', start.toISOString());
       } else if (filterRange === 'month') {
-        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
-        query = query.gte('created_at', startOfMonth);
+        const start = new Date(now.getFullYear(), now.getMonth(), 1);
+        query = query.gte('created_at', start.toISOString());
       } else if (filterRange === 'year') {
-        const startOfYear = new Date(now.getFullYear(), 0, 1).toISOString();
-        query = query.gte('created_at', startOfYear);
+        const start = new Date(now.getFullYear(), 0, 1);
+        query = query.gte('created_at', start.toISOString());
       }
 
       // Apply Pagination
@@ -96,7 +99,7 @@ export default function VisitorsAdminPage() {
   useEffect(() => {
     fetchVisitors();
 
-    // Sincronização em tempo real do contador de espectadores
+    // 1. Sincronização em tempo real do contador de espectadores (Presence)
     const presenceChannel = supabase.channel('online-viewers', {
       config: { presence: { key: 'admin' } }
     });
@@ -107,12 +110,26 @@ export default function VisitorsAdminPage() {
         const total = Object.values(newState).flat().length;
         setViewerCount(total);
       })
+      .subscribe(async (status) => {
+        if (status === 'SUBSCRIBED') {
+          // O admin também conta como alguém a ver o estado da live
+          await presenceChannel.track({ role: 'admin', at: new Date().toISOString() });
+        }
+      });
+
+    // 2. Sincronização em tempo real da lista de visitantes (Novas entradas)
+    const visitorsChannel = supabase
+      .channel('realtime-visitors')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'visitors' }, () => {
+        fetchVisitors(); // Recarregar a lista quando houver um novo visitante
+      })
       .subscribe();
 
     return () => {
       supabase.removeChannel(presenceChannel);
+      supabase.removeChannel(visitorsChannel);
     };
-  }, [currentPage, filterRange]);
+  }, [currentPage, filterRange, searchTerm]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -162,14 +179,12 @@ export default function VisitorsAdminPage() {
         <div>
           <div className="flex items-center gap-3 mb-2">
             <h1 className="text-4xl font-poppins font-bold text-navy">Visitantes</h1>
-            {viewerCount > 0 && (
-              <div className="flex items-center gap-2 bg-wine/10 text-wine px-3 py-1 rounded-full text-xs font-bold animate-pulse">
-                <span className="w-2 h-2 bg-wine rounded-full" />
-                {viewerCount} EM DIRETO AGORA
-              </div>
-            )}
+            <div className="flex items-center gap-2 bg-wine/10 text-wine px-3 py-1 rounded-full text-xs font-bold">
+              <span className={`w-2 h-2 rounded-full ${viewerCount > 0 ? 'bg-green-500 animate-pulse' : 'bg-gray-300'}`} />
+              {viewerCount} EM DIRETO
+            </div>
           </div>
-          <p className="text-gray-500">Acompanhe quem assistiu às transmissões em tempo real.</p>
+          <p className="text-gray-500">Total histórico: <span className="font-bold text-navy">{totalCount}</span> entradas registadas.</p>
         </div>
         <div className="flex items-center gap-3">
           <button 
