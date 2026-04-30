@@ -25,8 +25,8 @@ export default function SettingsPage() {
     hero_subtitle: 'Experience the power of the Word of God and the warmth of a loving family.',
     pastor_name: 'Pastor Chris Oyakhilome',
     pastor_image: 'https://images.unsplash.com/photo-1544427920-c49ccfb85579?auto=format&fit=crop&q=80&w=800',
-    about_intro: 'Christ Embassy Angola is a vibrant arm of LoveWorld Incorporated.',
-    contact_email: 'contact@ceangola.ao'
+    about_intro: 'Christ Embassy Portugal é um braço vibrante da LoveWorld Incorporated.',
+    contact_email: 'contacto@christembassyportugal.pt'
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -191,7 +191,7 @@ export default function SettingsPage() {
 
                   <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
                      <p className="text-[10px] text-white/50 uppercase tracking-[0.2em] font-bold mb-2">Contacto de Suporte</p>
-                     <p className="text-sm font-poppins font-bold text-gold">tech-support@ceangola.ao</p>
+                     <p className="text-sm font-poppins font-bold text-gold">tech-support@christembassyportugal.pt</p>
                   </div>
                </div>
             </div>

@@ -60,7 +60,7 @@ export default function AdminLoginPage() {
               <Church size={32} />
             </div>
             <h1 className="text-2xl font-poppins font-bold text-navy">Portal do Administrador</h1>
-            <p className="text-gray-400 text-sm mt-1 uppercase tracking-widest font-medium">Christ Embassy Angola</p>
+            <p className="text-gray-400 text-sm mt-1 uppercase tracking-widest font-medium">Christ Embassy Portugal</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">
@@ -73,7 +73,7 @@ export default function AdminLoginPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@ceangola.ao"
+                  placeholder="admin@christembassyportugal.pt"
                   className="w-full bg-off-white p-4 pl-12 rounded-xl outline-none focus:ring-2 focus:ring-gold/20 border-2 border-transparent focus:border-gold transition-all"
                 />
               </div>
