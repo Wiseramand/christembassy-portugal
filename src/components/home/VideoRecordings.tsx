@@ -6,10 +6,10 @@ import { Play, X, Clock, Heart, PlayCircle } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 
 const fallbackVideos = [
-  { id: '1', title: 'Culto Especial', duration: 'Ao Vivo', thumbnail_url: 'https://img.youtube.com/vi/DRkSU-BjHq4/maxresdefault.jpg', url: 'https://www.youtube.com/embed/DRkSU-BjHq4?start=24' },
-  { id: '2', title: 'A Palavra de Deus', duration: 'Ao Vivo', thumbnail_url: 'https://img.youtube.com/vi/hr5nBhl4gGo/maxresdefault.jpg', url: 'https://www.youtube.com/embed/hr5nBhl4gGo?start=5034' },
-  { id: '3', title: 'Crescimento Espiritual', duration: 'Ao Vivo', thumbnail_url: 'https://img.youtube.com/vi/y4UybMa3EE0/maxresdefault.jpg', url: 'https://www.youtube.com/embed/y4UybMa3EE0?start=1030' },
-  { id: '4', title: 'Transformação Divina', duration: 'Ao Vivo', thumbnail_url: 'https://img.youtube.com/vi/M_GQuGjyJuA/maxresdefault.jpg', url: 'https://www.youtube.com/embed/M_GQuGjyJuA?start=1649' },
+  { id: '1', title: 'Os 3 Caracteres de Deus', duration: 'Ao Vivo', thumbnail_url: 'https://img.youtube.com/vi/DRkSU-BjHq4/maxresdefault.jpg', url: 'https://www.youtube.com/embed/DRkSU-BjHq4?start=24' },
+  { id: '2', title: 'Conversa de Pai e Filho', duration: 'Ao Vivo', thumbnail_url: 'https://img.youtube.com/vi/hr5nBhl4gGo/maxresdefault.jpg', url: 'https://www.youtube.com/embed/hr5nBhl4gGo?start=5034' },
+  { id: '3', title: 'Os fundamentos do Evangelho Parte1', duration: 'Ao Vivo', thumbnail_url: 'https://img.youtube.com/vi/y4UybMa3EE0/maxresdefault.jpg', url: 'https://www.youtube.com/embed/y4UybMa3EE0?start=1030' },
+  { id: '4', title: 'Os fundamentos do Evangelho parte2', duration: 'Ao Vivo', thumbnail_url: 'https://img.youtube.com/vi/M_GQuGjyJuA/maxresdefault.jpg', url: 'https://www.youtube.com/embed/M_GQuGjyJuA?start=1649' },
 ];
 
 export default function VideoRecordings() {
@@ -46,7 +46,7 @@ export default function VideoRecordings() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {videos.map((video, idx) => (
-            <motion.div 
+            <motion.div
               key={video.id}
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -57,8 +57,8 @@ export default function VideoRecordings() {
               onClick={() => setSelectedVideo(video.url)}
             >
               <div className="relative aspect-video">
-                <img 
-                  src={video.thumbnail_url} 
+                <img
+                  src={video.thumbnail_url}
                   alt={video.title}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
@@ -73,8 +73,8 @@ export default function VideoRecordings() {
               </div>
               <div className="p-8">
                 <div className="flex items-center gap-2 mb-3">
-                   <div className="w-1.5 h-1.5 rounded-full bg-wine" />
-                   <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{video.category || 'Ensinamento'}</span>
+                  <div className="w-1.5 h-1.5 rounded-full bg-wine" />
+                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{video.category || 'Ensinamento'}</span>
                 </div>
                 <h4 className="text-xl font-poppins font-bold text-navy group-hover:text-gold transition-colors mb-6 line-clamp-2 leading-tight">
                   {video.title}
@@ -95,26 +95,26 @@ export default function VideoRecordings() {
       {/* Video Modal Player */}
       <AnimatePresence>
         {selectedVideo && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[100] flex items-center justify-center bg-navy/95 p-4 backdrop-blur-md"
           >
-            <button 
+            <button
               className="absolute top-8 right-8 text-white hover:text-gold transition-colors z-50 p-2"
               onClick={() => setSelectedVideo(null)}
             >
               <X size={40} />
             </button>
-            <motion.div 
+            <motion.div
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
               className="relative w-full max-w-5xl aspect-video rounded-3xl overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.5)] border border-white/10"
             >
-              <iframe 
-                src={selectedVideo.includes('youtube.com') ? selectedVideo : `https://www.youtube.com/embed/${selectedVideo}`} 
+              <iframe
+                src={selectedVideo.includes('youtube.com') ? selectedVideo : `https://www.youtube.com/embed/${selectedVideo}`}
                 className="w-full h-full"
                 allowFullScreen
                 allow="autoplay"
