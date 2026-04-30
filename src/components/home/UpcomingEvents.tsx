@@ -50,7 +50,7 @@ export default function UpcomingEvents() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="flex overflow-x-auto gap-8 pb-8 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {events.map((event, idx) => (
             <motion.div 
               key={event.id}
@@ -58,9 +58,9 @@ export default function UpcomingEvents() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.1 }}
               viewport={{ once: true }}
-              className="group cursor-pointer"
+              className="group cursor-pointer min-w-[85vw] sm:min-w-[calc(50%-1rem)] lg:min-w-[calc(25%-1.5rem)] snap-start shrink-0"
             >
-              <div className="relative overflow-hidden rounded-3xl mb-6 aspect-[4/5] shadow-lg group-hover:shadow-2xl transition-all duration-500">
+              <div className="relative overflow-hidden rounded-3xl mb-6 aspect-square shadow-lg group-hover:shadow-2xl transition-all duration-500">
                 <img 
                   src={event.image_url} 
                   alt={event.title}
