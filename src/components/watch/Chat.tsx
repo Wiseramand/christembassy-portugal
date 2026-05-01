@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Send, User, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'sonner';
 
 interface Message {
   id: string;
@@ -33,6 +34,13 @@ export default function Chat({ visitorName }: ChatProps) {
         .limit(50);
       
       if (data) setMessages(data);
+      if (error) {
+        console.error("Error fetching messages:", error);
+        // Table might not exist
+        if (error.code === '42P01') {
+          toast.error("Erro: A tabela 'chat_messages' não existe no banco de dados.");
+        }
+      }
     };
 
     fetchMessages();
@@ -72,8 +80,9 @@ export default function Chat({ visitorName }: ChatProps) {
 
       if (error) throw error;
       setNewMessage('');
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error sending message:", err);
+      toast.error("Erro ao enviar mensagem: " + (err.message || "Verifique a conexão"));
     } finally {
       setIsSending(false);
     }

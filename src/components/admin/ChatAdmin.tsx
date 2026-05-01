@@ -21,13 +21,19 @@ export default function ChatAdmin() {
 
   useEffect(() => {
     const fetchMessages = async () => {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('chat_messages')
         .select('*')
         .order('created_at', { ascending: true })
         .limit(100);
       
       if (data) setMessages(data);
+      if (error) {
+        console.error("Error fetching messages:", error);
+        if (error.code === '42P01') {
+          toast.error("A tabela 'chat_messages' ainda não foi criada no Supabase.");
+        }
+      }
     };
 
     fetchMessages();
