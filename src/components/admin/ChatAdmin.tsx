@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 interface Message {
   id: string;
   created_at: string;
-  content: string;
+  message: string;
   user_name: string;
   is_admin: boolean;
 }
@@ -68,7 +68,7 @@ export default function ChatAdmin() {
       const { error } = await supabase
         .from('chat_messages')
         .insert([{
-          content: newMessage.trim(),
+          message: newMessage.trim(),
           user_name: 'Admin',
           is_admin: true
         }]);
@@ -149,7 +149,7 @@ export default function ChatAdmin() {
                   : 'bg-white text-navy border border-gray-100 rounded-tl-none'
               }`}
             >
-              {msg.content}
+              {msg.message}
             </div>
           </div>
         ))}
