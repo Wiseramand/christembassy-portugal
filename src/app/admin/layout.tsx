@@ -56,8 +56,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         }
         if (mounted) setIsAdmin(false);
       } else {
-        const { data: { user } } = await supabase.auth.getUser();
         if (mounted) {
+          const user = session.user;
           const role = user?.user_metadata?.role || user?.app_metadata?.role || 'admin';
           setUserRole(role);
           setIsAdmin(true);
@@ -67,19 +67,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
     checkAuth();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === 'SIGNED_OUT') {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session) {
         if (mounted) {
           setIsAdmin(false);
           setUserRole(null);
           if (pathname !== '/admin/login') router.push('/admin/login');
         }
-      } else if (session && mounted) {
-        if (!userRole) {
-          const { data: { user } } = await supabase.auth.getUser();
-          const role = user?.user_metadata?.role || user?.app_metadata?.role || 'admin';
-          setUserRole(role);
-        }
+      } else if (mounted) {
+        const user = session.user;
+        const role = user?.user_metadata?.role || user?.app_metadata?.role || 'admin';
+        setUserRole(role);
         setIsAdmin(true);
       }
     });
@@ -88,7 +86,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       mounted = false;
       subscription.unsubscribe();
     };
-  }, [router, pathname, isAdmin, userRole]);
+  }, [router, pathname, isAdmin]); // userRole removed from deps to prevent re-triggering
 
   if (pathname === '/admin/login') return <>{children}</>;
   

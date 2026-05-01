@@ -55,7 +55,8 @@ export default function DonationsAdminPage() {
 
   useEffect(() => {
     async function checkRole() {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { session } } = await supabase.auth.getSession();
+      const user = session?.user;
       const role = user?.user_metadata?.role || user?.app_metadata?.role || 'admin';
       if (role === 'tecnico') {
         toast.error("Acesso restrito");
