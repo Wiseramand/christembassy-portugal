@@ -45,6 +45,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     let mounted = true;
 
     const checkAuth = async () => {
+      // If we already know we are an admin and we are not on the login page, skip
+      if (isAdmin && pathname !== '/admin/login') return;
+
       const { data: { session } } = await supabase.auth.getSession();
       
       if (!session) {
@@ -52,28 +55,26 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           router.push('/admin/login');
         }
         if (mounted) setIsAdmin(false);
-        return;
-      }
-      
-      const { data: { user } } = await supabase.auth.getUser();
-      if (mounted) {
-        const role = user?.user_metadata?.role || user?.app_metadata?.role || 'admin';
-        setUserRole(role);
-        setIsAdmin(true);
+      } else {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (mounted) {
+          const role = user?.user_metadata?.role || user?.app_metadata?.role || 'admin';
+          setUserRole(role);
+          setIsAdmin(true);
+        }
       }
     };
 
     checkAuth();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      if (!session && pathname !== '/admin/login') {
-        router.push('/admin/login');
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_OUT') {
         if (mounted) {
           setIsAdmin(false);
           setUserRole(null);
+          if (pathname !== '/admin/login') router.push('/admin/login');
         }
       } else if (session && mounted) {
-        // Only fetch user if we don't have it yet to speed up navigation
         if (!userRole) {
           const { data: { user } } = await supabase.auth.getUser();
           const role = user?.user_metadata?.role || user?.app_metadata?.role || 'admin';
@@ -87,14 +88,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       mounted = false;
       subscription.unsubscribe();
     };
-  }, [router]); // Remove pathname from dependencies to avoid re-running on every internal navigation
+  }, [router, pathname, isAdmin, userRole]);
 
   if (pathname === '/admin/login') return <>{children}</>;
   
   if (isAdmin === null) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-off-white">
-        <div className="w-8 h-8 border-4 border-navy/10 border-t-wine rounded-full animate-spin" />
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-10 h-10 border-4 border-navy/10 border-t-wine rounded-full animate-spin" />
+          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest animate-pulse">Verificando Acesso...</p>
+        </div>
       </div>
     );
   }
