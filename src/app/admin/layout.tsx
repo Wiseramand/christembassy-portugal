@@ -42,6 +42,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname();
 
   useEffect(() => {
+    let mounted = true;
+
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       
@@ -49,14 +51,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         if (pathname !== '/admin/login') {
           router.push('/admin/login');
         }
-        setIsAdmin(false);
+        if (mounted) setIsAdmin(false);
         return;
       }
       
       const { data: { user } } = await supabase.auth.getUser();
-      const role = user?.user_metadata?.role || user?.app_metadata?.role || 'admin';
-      setUserRole(role);
-      setIsAdmin(true);
+      if (mounted) {
+        const role = user?.user_metadata?.role || user?.app_metadata?.role || 'admin';
+        setUserRole(role);
+        setIsAdmin(true);
+      }
     };
 
     checkAuth();
@@ -64,18 +68,26 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (!session && pathname !== '/admin/login') {
         router.push('/admin/login');
-        setIsAdmin(false);
-        setUserRole(null);
-      } else if (session) {
-        const { data: { user } } = await supabase.auth.getUser();
-        const role = user?.user_metadata?.role || user?.app_metadata?.role || 'admin';
-        setUserRole(role);
+        if (mounted) {
+          setIsAdmin(false);
+          setUserRole(null);
+        }
+      } else if (session && mounted) {
+        // Only fetch user if we don't have it yet to speed up navigation
+        if (!userRole) {
+          const { data: { user } } = await supabase.auth.getUser();
+          const role = user?.user_metadata?.role || user?.app_metadata?.role || 'admin';
+          setUserRole(role);
+        }
         setIsAdmin(true);
       }
     });
 
-    return () => subscription.unsubscribe();
-  }, [router, pathname]);
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
+  }, [router]); // Remove pathname from dependencies to avoid re-running on every internal navigation
 
   if (pathname === '/admin/login') return <>{children}</>;
   
