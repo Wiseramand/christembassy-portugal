@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState } from 'react';
 import HLSPlayer from '@/components/video/HLSPlayer';
 import Chat from '@/components/watch/Chat';
