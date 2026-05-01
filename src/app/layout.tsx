@@ -17,8 +17,12 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: "Christ Embassy Angola | LoveWorld",
-  description: "Bem-vindo à Christ Embassy Angola. Dando um sentido à sua vida.",
+  title: "Christ Embassy Portugal | LoveWorld",
+  description: "Bem-vindo à Christ Embassy Portugal. Dando um sentido à sua vida.",
+  icons: {
+    icon: '/images/logo.png',
+    apple: '/images/logo.png',
+  }
 };
 
 export default function RootLayout({
