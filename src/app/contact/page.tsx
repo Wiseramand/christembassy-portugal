@@ -7,8 +7,8 @@ import { toast } from 'sonner';
 import { supabase } from '@/lib/supabase';
 
 const OTHER_CHURCHES = [
-  { name: 'Christ Embassy Odivelas', address: 'RUA HEROIS DE CHAIMITE, N 21, LT D. CP: 2675-376 ODIVELAS', phone: '+351 000 000 000' },
-  { name: 'Christ Embassy Setúbal', address: 'Rua General Daniel de Sousa 116, 2900-344 Setúbal', phone: '+351 000 000 000' },
+  { name: 'Christ Embassy Odivelas', address: 'RUA HEROIS DE CHAIMITE, N 21, LT D. CP: 2675-376 ODIVELAS', phone: '+351 916 419 087' },
+  { name: 'Christ Embassy Setúbal', address: 'Rua General Daniel de Sousa 116, 2900-344 Setúbal', phone: '+351 916 419 087' },
 ];
 
 export default function ContactPage() {
@@ -95,7 +95,7 @@ export default function ContactPage() {
                 {[
                   { icon: MapPin, title: 'Localização', detail: 'Odivelas & Setúbal', sub: 'Igrejas Locais' },
                   { icon: Clock, title: 'Horários dos Cultos', detail: 'Domingos às 10h', sub: 'Qua: 19h | Sex (Intercessão): 19h' },
-                  { icon: Phone, title: 'Ligue-nos', detail: '+351 000 000 000', sub: 'Seg-Sex, 9h - 17h' },
+                  { icon: Phone, title: 'Ligue-nos', detail: '+351 916 419 087', sub: 'Seg-Sex, 9h - 17h' },
                 ].map((item, i) => (
                   <motion.div 
                     key={i}
@@ -174,7 +174,7 @@ export default function ContactPage() {
                         type="tel"
                         value={formData.phone}
                         onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                        placeholder="+351 000 000 000"
+                        placeholder="+351 916 419 087"
                         className="w-full bg-off-white p-4 rounded-xl outline-none focus:ring-2 focus:ring-wine/20 transition-all border-2 border-transparent focus:border-wine"
                       />
                     </div>
