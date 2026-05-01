@@ -23,11 +23,12 @@ import Link from 'next/link';
 const sidebarLinks = [
   { name: 'Painel', href: '/admin', icon: LayoutDashboard },
   { name: 'Visitantes em Direto', href: '/admin/visitors', icon: Users },
+  { name: 'Chat em Direto', href: '/admin/chat', icon: MessageSquare },
   { name: 'Página Inicial / Hero', href: '/admin/stream', icon: Video },
   { name: 'Eventos', href: '/admin/events', icon: Calendar },
   { name: 'Vídeos', href: '/admin/videos', icon: Video },
   { name: 'Testemunhos', href: '/admin/testimonials', icon: MessageSquare },
-  { name: 'Doações', href: '/admin/donations', icon: Heart },
+  { name: 'Doações', href: '/admin/donations', icon: Heart, role: 'admin' },
   { name: 'Livraria', href: '/admin/books', icon: Book },
   { name: 'Mensagens', href: '/admin/messages', icon: MessageSquare },
   { name: 'Definições', href: '/admin/settings', icon: Settings },
@@ -35,6 +36,7 @@ const sidebarLinks = [
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
@@ -51,16 +53,23 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         return;
       }
       
+      const { data: { user } } = await supabase.auth.getUser();
+      const role = user?.user_metadata?.role || user?.app_metadata?.role || 'admin';
+      setUserRole(role);
       setIsAdmin(true);
     };
 
     checkAuth();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (!session && pathname !== '/admin/login') {
         router.push('/admin/login');
         setIsAdmin(false);
+        setUserRole(null);
       } else if (session) {
+        const { data: { user } } = await supabase.auth.getUser();
+        const role = user?.user_metadata?.role || user?.app_metadata?.role || 'admin';
+        setUserRole(role);
         setIsAdmin(true);
       }
     });
@@ -85,11 +94,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     router.push('/admin/login');
   };
 
+  const filteredLinks = sidebarLinks.filter(link => {
+    if (link.role === 'admin' && userRole === 'tecnico') return false;
+    return true;
+  });
+
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex flex-col w-72 bg-white border-r border-gray-100 h-screen sticky top-0">
-        <div className="p-8 border-b border-gray-50 mb-4 bg-gray-50/20">
+      <aside className="hidden lg:flex flex-col w-72 bg-white border-r border-gray-100 h-screen sticky top-0 overflow-y-auto">
+        <div className="p-8 border-b border-gray-50 mb-4 bg-gray-50/20 shrink-0">
           <Link href="/" className="flex items-center gap-4 group">
             <div className="w-12 h-12 bg-wine rounded-full flex items-center justify-center text-white font-bold shadow-lg shadow-wine/20 group-hover:scale-105 transition-transform duration-300">
                CE
@@ -101,8 +115,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </Link>
         </div>
 
-        <nav className="flex-grow px-6 space-y-2">
-          {sidebarLinks.map((link) => {
+        <nav className="flex-grow px-6 space-y-2 pb-8">
+          {filteredLinks.map((link) => {
             const Icon = link.icon;
             const isActive = pathname === link.href;
             return (
@@ -123,7 +137,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           })}
         </nav>
 
-        <div className="p-6 border-t border-gray-50">
+        <div className="p-6 border-t border-gray-50 shrink-0">
           <button 
             onClick={handleLogout}
             className="flex items-center gap-3 w-full px-4 py-3 text-wine font-bold hover:bg-wine/5 rounded-xl transition-all"
@@ -154,13 +168,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {sidebarOpen && (
         <div className="lg:hidden fixed inset-0 z-50 flex">
           <div className="fixed inset-0 bg-navy/60 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
-          <div className="relative w-72 bg-white h-full shadow-2xl flex flex-col p-8 drawer-slide-in">
+          <div className="relative w-72 bg-white h-full shadow-2xl flex flex-col p-8 drawer-slide-in overflow-y-auto">
              {/* Same links as desktop but inside the drawer */}
              <div className="mb-8">
                <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Navegação</span>
              </div>
              <nav className="flex-grow space-y-4">
-                {sidebarLinks.map((link) => (
+                {filteredLinks.map((link) => (
                    <Link 
                      key={link.href} 
                      href={link.href}
@@ -186,3 +200,4 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     </div>
   );
 }
+

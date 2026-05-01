@@ -11,6 +11,7 @@ import {
   MoreHorizontal,
   Calendar
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 
@@ -30,6 +31,7 @@ export default function DonationsAdminPage() {
     total: 0,
     count: 0
   });
+  const router = useRouter();
 
   async function fetchDonations() {
     setLoading(true);
@@ -52,8 +54,18 @@ export default function DonationsAdminPage() {
   }
 
   useEffect(() => {
+    async function checkRole() {
+      const { data: { user } } = await supabase.auth.getUser();
+      const role = user?.user_metadata?.role || user?.app_metadata?.role || 'admin';
+      if (role === 'tecnico') {
+        toast.error("Acesso restrito");
+        router.push('/admin');
+      }
+    }
+    
+    checkRole();
     fetchDonations();
-  }, []);
+  }, [router]);
 
   return (
     <div className="space-y-12">

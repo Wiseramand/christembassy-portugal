@@ -1,7 +1,6 @@
-"use client";
-
 import React, { useEffect, useState } from 'react';
 import HLSPlayer from '@/components/video/HLSPlayer';
+import Chat from '@/components/watch/Chat';
 import { supabase } from '@/lib/supabase';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Users, Share2, LogIn, Globe, MapPin, Phone, User, Play } from 'lucide-react';
@@ -28,7 +27,6 @@ const countryCodes = [
   { code: '+49', country: 'Alemanha' },
   { code: '+41', country: 'Suíça' },
   { code: '+352', country: 'Luxemburgo' },
-  // ... can add more or use a more complete list
 ];
 
 export default function WatchPage() {
@@ -38,6 +36,7 @@ export default function WatchPage() {
   });
   const [loading, setLoading] = useState(true);
   const [hasEntered, setHasEntered] = useState(false);
+  const [visitorName, setVisitorName] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -53,7 +52,11 @@ export default function WatchPage() {
   useEffect(() => {
     // Check if already entered in this session
     const entered = localStorage.getItem('ce_visitor_entered');
-    if (entered) setHasEntered(true);
+    const name = localStorage.getItem('ce_visitor_name');
+    if (entered) {
+      setHasEntered(true);
+      if (name) setVisitorName(name);
+    }
 
     async function fetchSettings() {
       try {
@@ -142,6 +145,8 @@ export default function WatchPage() {
       if (error) throw error;
 
       localStorage.setItem('ce_visitor_entered', 'true');
+      localStorage.setItem('ce_visitor_name', formData.name);
+      setVisitorName(formData.name);
       setHasEntered(true);
       toast.success("Bem-vindo ao nosso Culto Online!");
     } catch (err: any) {
@@ -304,6 +309,8 @@ export default function WatchPage() {
             </div>
 
             <div className="space-y-8">
+              <Chat visitorName={visitorName} />
+              
               <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm">
                  <h3 className="text-navy font-poppins font-bold mb-6">Horário dos Cultos</h3>
                  <div className="space-y-4">
@@ -331,3 +338,4 @@ export default function WatchPage() {
     </div>
   );
 }
+
