@@ -14,6 +14,7 @@ export default function Hero() {
     hero_subtitle: 'Experimente o poder da Palavra de Deus e o calor de uma família amorosa.'
   });
   const videoRef = useRef<HTMLVideoElement>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
     async function fetchSettings() {
@@ -30,7 +31,17 @@ export default function Hero() {
   }, []);
 
   const toggleMute = () => {
-    if (videoRef.current) {
+    if (settings.hero_video_url.includes('youtube.com') || settings.hero_video_url.includes('youtu.be')) {
+      if (iframeRef.current && iframeRef.current.contentWindow) {
+        const command = isMuted ? 'unMute' : 'mute';
+        iframeRef.current.contentWindow.postMessage(JSON.stringify({
+          event: 'command',
+          func: command,
+          args: ''
+        }), '*');
+        setIsMuted(!isMuted);
+      }
+    } else if (videoRef.current) {
       videoRef.current.muted = !videoRef.current.muted;
       setIsMuted(videoRef.current.muted);
     }
@@ -111,11 +122,21 @@ export default function Hero() {
               {(settings.hero_video_url.includes('youtube.com') || settings.hero_video_url.includes('youtu.be')) ? (
                 <div className="w-full aspect-[4/3] md:aspect-auto">
                   <iframe
-                    src={`https://www.youtube.com/embed/${getYouTubeID(settings.hero_video_url)}?autoplay=1&mute=1&loop=1&playlist=${getYouTubeID(settings.hero_video_url)}&controls=0&modestbranding=1&rel=0&showinfo=0`}
+                    ref={iframeRef}
+                    src={`https://www.youtube.com/embed/${getYouTubeID(settings.hero_video_url)}?autoplay=1&mute=1&loop=1&playlist=${getYouTubeID(settings.hero_video_url)}&controls=0&modestbranding=1&rel=0&showinfo=0&enablejsapi=1`}
                     className="w-full h-full min-h-[300px] md:min-h-[450px]"
                     allow="autoplay; encrypted-media"
                     allowFullScreen
                   />
+                  
+                  {/* Mute/Unmute Button Overlay for YouTube */}
+                  <button 
+                    onClick={toggleMute}
+                    className="absolute top-6 right-6 p-3 bg-white/10 backdrop-blur-md rounded-full text-white border border-white/20 hover:bg-white/20 transition-all active:scale-90 z-30"
+                    aria-label={isMuted ? "Ativar som" : "Desativar som"}
+                  >
+                    {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+                  </button>
                 </div>
               ) : (
                 <>
