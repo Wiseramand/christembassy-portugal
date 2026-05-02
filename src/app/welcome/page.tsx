@@ -48,7 +48,7 @@ export default function WelcomePage() {
               <h2 className="text-3xl font-poppins font-bold text-navy mb-8">Uma Mensagem do nosso Pastor de Grupo</h2>
               
               <p className="mb-6 text-xl font-medium text-navy/80">
-                "É com imensa alegria e o amor de Cristo que vos dou as boas-vindas à Christ Embassy Angola. 
+                "É com imensa alegria e o amor de Cristo que vos dou as boas-vindas à Christ Embassy Portugal. 
                 Estamos aqui para dar um sentido à sua vida e ajudá-lo a descobrir o propósito glorioso que Deus tem para si."
               </p>
 
@@ -63,14 +63,14 @@ export default function WelcomePage() {
               </div>
 
               <p className="mb-6">
-                Quer seja novo em Angola ou esteja à procura de um lar espiritual, convidamo-lo a juntar-se a nós em qualquer um dos nossos centros. 
+                Quer seja novo em Portugal ou esteja à procura de um lar espiritual, convidamo-lo a juntar-se a nós em qualquer um dos nossos centros. 
                 Temos uma família à sua espera, pronta para caminhar consigo nesta jornada de fé.
               </p>
 
               <p className="font-bold text-navy mt-12">
                 Com amor,<br />
                 <span className="text-wine text-2xl">Pastor Charles Okorodudu</span><br />
-                <span className="text-gray-400 font-medium">Pastor de Grupo, Christ Embassy Angola</span>
+                <span className="text-gray-400 font-medium">Pastor de Grupo, Christ Embassy Portugal</span>
               </p>
             </div>
           </motion.div>
@@ -89,7 +89,7 @@ export default function WelcomePage() {
                 A Nossa Visão
               </h3>
               <p className="text-gray-300 mb-8 leading-relaxed">
-                Levar a presença divina de Deus a todas as pessoas em Angola, manifestando a vida de Cristo através da Palavra.
+                Levar a presença divina de Deus a todas as pessoas em Portugal, manifestando a vida de Cristo através da Palavra.
               </p>
               <Link href="/about" className="text-gold font-bold flex items-center gap-2 hover:gap-4 transition-all">
                 Saber mais sobre nós <ArrowRight size={18} />

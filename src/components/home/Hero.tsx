@@ -9,7 +9,7 @@ import { supabase } from '@/lib/supabase';
 export default function Hero() {
   const [isMuted, setIsMuted] = useState(true);
   const [settings, setSettings] = useState({
-    hero_video_url: '/videos/IPPC.mp4',
+    hero_video_url: 'https://youtu.be/9poIdQFwwiY',
     hero_title: 'Dando um sentido à sua vida',
     hero_subtitle: 'Experimente o poder da Palavra de Deus e o calor de uma família amorosa.'
   });
@@ -20,7 +20,7 @@ export default function Hero() {
       const { data } = await supabase.from('stream_settings').select('*').single();
       if (data) {
         setSettings({
-          hero_video_url: data.hero_video_url || '/videos/IPPC.mp4',
+          hero_video_url: data.hero_video_url || 'https://youtu.be/9poIdQFwwiY',
           hero_title: data.hero_title || 'Dando um sentido à sua vida',
           hero_subtitle: data.hero_subtitle || 'Experimente o poder da Palavra de Deus e o calor de uma família amorosa.'
         });
@@ -66,7 +66,7 @@ export default function Hero() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-gold"></span>
               </span>
-              Bem-vindo à Christ Embassy Angola
+              Bem-vindo à Christ Embassy Portugal
             </motion.div>
 
             <h1 className="text-5xl md:text-7xl font-poppins font-bold text-white leading-tight mb-6">
@@ -108,32 +108,45 @@ export default function Hero() {
             className="relative hidden lg:block"
           >
             <div className="relative z-10 rounded-2xl overflow-hidden border-4 border-gold/30 shadow-2xl group">
-              <video 
-                key={settings.hero_video_url}
-                ref={videoRef}
-                src={settings.hero_video_url} 
-                className="w-full h-auto object-cover aspect-[4/3] md:aspect-auto"
-                autoPlay
-                muted
-                loop
-                playsInline
-              />
-              
-              <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
-              
-              <div className="absolute bottom-6 left-6">
-                <p className="text-white font-poppins font-bold text-xl">Pastor Chris Oyakhilome</p>
-                <p className="text-gold text-sm font-medium">Presidente, LoveWorld Inc.</p>
-              </div>
+              {(settings.hero_video_url.includes('youtube.com') || settings.hero_video_url.includes('youtu.be')) ? (
+                <div className="w-full aspect-[4/3] md:aspect-auto">
+                  <iframe
+                    src={`https://www.youtube.com/embed/${getYouTubeID(settings.hero_video_url)}?autoplay=1&mute=1&loop=1&playlist=${getYouTubeID(settings.hero_video_url)}&controls=0&modestbranding=1&rel=0&showinfo=0`}
+                    className="w-full h-full min-h-[300px] md:min-h-[450px]"
+                    allow="autoplay; encrypted-media"
+                    allowFullScreen
+                  />
+                </div>
+              ) : (
+                <>
+                  <video 
+                    key={settings.hero_video_url}
+                    ref={videoRef}
+                    src={settings.hero_video_url} 
+                    className="w-full h-auto object-cover aspect-[4/3] md:aspect-auto"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                  />
+                  
+                  <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+                  
+                  <div className="absolute bottom-6 left-6">
+                    <p className="text-white font-poppins font-bold text-xl">Pastor Chris Oyakhilome</p>
+                    <p className="text-gold text-sm font-medium">Presidente, LoveWorld Inc.</p>
+                  </div>
 
-              {/* Mute/Unmute Button Overlay */}
-              <button 
-                onClick={toggleMute}
-                className="absolute top-6 right-6 p-3 bg-white/10 backdrop-blur-md rounded-full text-white border border-white/20 hover:bg-white/20 transition-all active:scale-90"
-                aria-label={isMuted ? "Ativar som" : "Desativar som"}
-              >
-                {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
-              </button>
+                  {/* Mute/Unmute Button Overlay */}
+                  <button 
+                    onClick={toggleMute}
+                    className="absolute top-6 right-6 p-3 bg-white/10 backdrop-blur-md rounded-full text-white border border-white/20 hover:bg-white/20 transition-all active:scale-90"
+                    aria-label={isMuted ? "Ativar som" : "Desativar som"}
+                  >
+                    {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+                  </button>
+                </>
+              )}
             </div>
             
             {/* Decorative Elements */}
@@ -155,4 +168,10 @@ export default function Hero() {
       </motion.div>
     </section>
   );
+}
+
+function getYouTubeID(url: string) {
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const match = url.match(regExp);
+  return (match && match[2].length === 11) ? match[2] : null;
 }

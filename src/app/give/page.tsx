@@ -223,7 +223,7 @@ export default function GivePage() {
                     <h2 className="text-4xl font-poppins font-bold text-navy mb-4">Que Deus o abençoe!</h2>
                     <p className="text-gray-500 mb-10 max-w-sm mx-auto">
                       A sua oferta de <span className="font-bold text-wine">€{finalAmount}</span> foi recebida. 
-                      Obrigado por ser nosso parceiro na propagação do Evangelho em Angola.
+                      Obrigado por ser nosso parceiro na propagação do Evangelho em Portugal.
                     </p>
                     <button 
                       onClick={() => { setStep(1); setCustomAmount(""); setForm({name: "", email: ""}); }}
