@@ -169,41 +169,41 @@ export default function VideosAdminPage() {
            <div className="w-8 h-8 border-4 border-navy/10 border-t-gold rounded-full animate-spin" />
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="flex flex-wrap gap-8">
            {videos.map((video) => (
              <motion.div 
                key={video.id}
-               className="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 group"
+               className="bg-white rounded-[32px] overflow-hidden shadow-sm border border-gray-100 group w-[280px] flex flex-col"
              >
-                <div className="aspect-video relative group-hover:shadow-inner transition-all">
+                <div className="aspect-video relative m-2 rounded-[24px] overflow-hidden">
                    <img 
                      src={video.thumbnail_url} 
                      className="w-full h-full object-cover" 
                      alt={video.title} 
                    />
                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      <div className="w-12 h-12 bg-gold text-navy rounded-full flex items-center justify-center shadow-2xl scale-75 group-hover:scale-100 transition-transform">
-                         <Play size={24} fill="currentColor" />
+                      <div className="w-10 h-10 bg-gold text-navy rounded-full flex items-center justify-center shadow-2xl scale-75 group-hover:scale-100 transition-transform">
+                         <Play size={20} fill="currentColor" />
                       </div>
                    </div>
-                   <div className="absolute top-3 right-3 flex gap-2">
-                      <button onClick={() => handleOpenModal(video)} className="p-2 bg-white/90 backdrop-blur rounded-lg text-navy hover:bg-gold transition-colors">
-                        <Edit size={16} />
+                   <div className="absolute top-2 right-2 flex gap-2">
+                      <button onClick={() => handleOpenModal(video)} className="w-8 h-8 bg-white/90 backdrop-blur rounded-lg text-navy hover:bg-gold transition-colors flex items-center justify-center">
+                        <Edit size={14} />
                       </button>
-                      <button onClick={() => handleDelete(video.id)} className="p-2 bg-white/90 backdrop-blur rounded-lg text-wine hover:bg-wine hover:text-white transition-colors">
-                        <Trash2 size={16} />
+                      <button onClick={() => handleDelete(video.id)} className="w-8 h-8 bg-white/90 backdrop-blur rounded-lg text-wine hover:bg-wine hover:text-white transition-colors flex items-center justify-center">
+                        <Trash2 size={14} />
                       </button>
                    </div>
-                   <div className="absolute bottom-3 left-3 bg-black/60 backdrop-blur px-2 py-1 rounded text-[10px] font-bold text-white uppercase tracking-widest">
+                   <div className="absolute bottom-2 right-2 bg-black/60 backdrop-blur px-2 py-1 rounded text-[9px] font-bold text-white uppercase tracking-widest">
                       {video.duration}
                    </div>
                 </div>
-                <div className="p-6">
-                   <div className="flex items-center gap-2 mb-3">
-                      <Tag size={12} className="text-gold" />
-                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{video.category}</span>
+                <div className="p-5 pt-2">
+                   <div className="flex items-center gap-2 mb-2">
+                      <Tag size={10} className="text-gold" />
+                      <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">{video.category}</span>
                    </div>
-                   <h3 className="font-poppins font-bold text-navy truncate group-hover:text-gold transition-colors" title={video.title}>
+                   <h3 className="font-poppins font-bold text-navy truncate group-hover:text-gold transition-colors text-base" title={video.title}>
                      {video.title}
                    </h3>
                 </div>

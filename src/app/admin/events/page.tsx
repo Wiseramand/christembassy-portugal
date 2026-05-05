@@ -193,50 +193,57 @@ export default function EventsAdminPage() {
             <button onClick={() => handleOpenModal()} className="btn-primary">Começar</button>
          </div>
       ) : (
-         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+         <div className="flex flex-wrap gap-8">
             {events.map((event) => (
               <motion.div 
                 key={event.id}
                 layout
-                className="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 group"
+                className="bg-white rounded-[32px] overflow-hidden shadow-sm border border-gray-100 group w-[280px] flex flex-col"
               >
-                <div className="aspect-[16/9] relative">
+                <div className="aspect-square relative overflow-hidden m-2 rounded-[24px]">
                    <img 
                      src={event.image_url} 
                      alt={event.title}
                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                    />
                    <div className="absolute inset-0 bg-navy/20 group-hover:bg-navy/40 transition-colors" />
-                   <div className="absolute top-4 right-4 flex gap-2">
+                   
+                   {/* Data Badge Overlay style like front */}
+                   <div className="absolute bottom-4 left-4 right-4">
+                      <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-3 flex items-center gap-3">
+                         <div className="text-center border-r border-white/20 pr-3">
+                            <p className="text-white font-bold text-lg leading-none">{new Date(event.date).getDate()}</p>
+                            <p className="text-gold text-[8px] uppercase font-bold tracking-widest mt-1">
+                               {new Date(event.date).toLocaleDateString('pt-PT', { month: 'short' })}
+                            </p>
+                         </div>
+                         <div className="text-[10px] text-white/80 font-bold uppercase tracking-tight">
+                            {new Date(event.date).toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' })}
+                         </div>
+                      </div>
+                   </div>
+
+                   <div className="absolute top-3 right-3 flex gap-2">
                       <button 
                         onClick={() => handleOpenModal(event)}
-                        className="w-10 h-10 bg-white/90 backdrop-blur text-navy rounded-xl flex items-center justify-center hover:bg-gold transition-colors"
+                        className="w-8 h-8 bg-white/90 backdrop-blur text-navy rounded-lg flex items-center justify-center hover:bg-gold transition-colors shadow-sm"
                       >
-                         <Edit size={18} />
+                         <Edit size={14} />
                       </button>
                       <button 
                         onClick={() => handleDelete(event.id)}
-                        className="w-10 h-10 bg-white/90 backdrop-blur text-wine rounded-xl flex items-center justify-center hover:bg-wine hover:text-white transition-colors"
+                        className="w-8 h-8 bg-white/90 backdrop-blur text-wine rounded-lg flex items-center justify-center hover:bg-wine hover:text-white transition-colors shadow-sm"
                       >
-                         <Trash2 size={18} />
+                         <Trash2 size={14} />
                       </button>
                    </div>
                 </div>
-                <div className="p-8">
-                   <div className="flex items-center gap-3 mb-4">
-                      <div className="bg-wine/5 px-2 py-1 rounded text-[10px] font-bold text-wine uppercase tracking-widest leading-none">
-                         {new Date(event.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
-                      </div>
-                      <div className="bg-gold/10 px-2 py-1 rounded text-[10px] font-bold text-gold uppercase tracking-widest leading-none">
-                         {new Date(event.date).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}
-                      </div>
-                   </div>
-                   <h3 className="text-xl font-poppins font-bold text-navy mb-4">{event.title}</h3>
-                   <div className="space-y-2 text-sm text-gray-500">
-                      <div className="flex items-center gap-2">
-                         <MapPin size={16} className="text-gray-300" />
-                         {event.location}
-                      </div>
+                
+                <div className="p-5 pt-2">
+                   <h3 className="text-lg font-poppins font-bold text-navy mb-2 line-clamp-1 group-hover:text-gold transition-colors">{event.title}</h3>
+                   <div className="flex items-center gap-2 text-xs text-gray-400 font-medium">
+                      <MapPin size={14} className="text-wine" />
+                      <span className="truncate">{event.location}</span>
                    </div>
                 </div>
               </motion.div>

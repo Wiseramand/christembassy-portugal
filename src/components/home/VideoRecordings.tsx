@@ -24,7 +24,13 @@ export default function VideoRecordings() {
         .order('created_at', { ascending: false })
         .limit(8);
 
-      if (data && data.length > 0 && !error) {
+      if (error) {
+        console.error('Erro ao buscar vídeos:', error.message);
+        setVideos(fallbackVideos);
+        return;
+      }
+
+      if (data && data.length > 0) {
         setVideos(data);
       } else {
         setVideos(fallbackVideos);

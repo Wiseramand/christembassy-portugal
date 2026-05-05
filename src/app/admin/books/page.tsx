@@ -202,46 +202,46 @@ export default function BooksAdminPage() {
             <button onClick={() => handleOpenModal()} className="btn-primary">Começar Agora</button>
          </div>
       ) : (
-         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+         <div className="flex flex-wrap gap-8">
             {books.map((book) => (
               <motion.div 
                 key={book.id}
                 layout
-                className="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 group flex flex-col"
+                className="bg-white rounded-[32px] overflow-hidden shadow-sm border border-gray-100 group w-[280px] flex flex-col"
               >
-                <div className="aspect-[3/4] relative bg-navy/5">
+                <div className="aspect-[3/4] relative m-2 rounded-[24px] overflow-hidden bg-navy/5">
                    <img 
                      src={book.image_url} 
                      alt={book.title}
                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80"
                    />
-                   <div className="absolute top-4 right-4 flex gap-2">
+                   <div className="absolute top-2 right-2 flex gap-2">
                       <button 
                         onClick={() => handleOpenModal(book)}
-                        className="w-10 h-10 bg-white/90 backdrop-blur text-navy rounded-xl flex items-center justify-center hover:bg-gold transition-colors"
+                        className="w-8 h-8 bg-white/90 backdrop-blur text-navy rounded-lg flex items-center justify-center hover:bg-gold transition-colors shadow-sm"
                       >
-                         <Edit size={18} />
+                         <Edit size={14} />
                       </button>
                       <button 
                         onClick={() => handleDelete(book.id)}
-                        className="w-10 h-10 bg-white/90 backdrop-blur text-wine rounded-xl flex items-center justify-center hover:bg-wine hover:text-white transition-colors"
+                        className="w-8 h-8 bg-white/90 backdrop-blur text-wine rounded-lg flex items-center justify-center hover:bg-wine hover:text-white transition-colors shadow-sm"
                       >
-                         <Trash2 size={18} />
+                         <Trash2 size={14} />
                       </button>
                    </div>
-                   <div className="absolute bottom-4 left-4">
-                      <span className="bg-gold text-navy text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">
+                   <div className="absolute bottom-3 left-3">
+                      <span className="bg-gold text-navy text-[8px] font-bold px-2 py-1 rounded-full uppercase tracking-widest shadow-lg">
                         {book.category}
                       </span>
                    </div>
                 </div>
-                <div className="p-4 flex-grow flex flex-col">
-                   <h3 className="text-base font-poppins font-bold text-navy mb-1 line-clamp-1">{book.title}</h3>
-                   <p className="text-gray-400 text-[10px] mb-3 uppercase tracking-widest font-medium">Por {book.author}</p>
+                <div className="p-5 pt-2 flex-grow flex flex-col">
+                   <h3 className="text-base font-poppins font-bold text-navy mb-1 line-clamp-1 group-hover:text-gold transition-colors">{book.title}</h3>
+                   <p className="text-gray-400 text-[9px] mb-3 uppercase tracking-widest font-medium">Por {book.author}</p>
                    <p className="text-gray-500 text-xs leading-relaxed line-clamp-2 mb-4">
                       {book.description}
                    </p>
-                   <div className="mt-auto pt-4 border-t border-gray-50 flex items-center gap-2 text-[10px] font-bold text-wine uppercase tracking-widest">
+                   <div className="mt-auto pt-4 border-t border-gray-50 flex items-center gap-2 text-[9px] font-bold text-wine uppercase tracking-widest">
                       <FileDown size={12} />
                       PDF Carregado
                    </div>
