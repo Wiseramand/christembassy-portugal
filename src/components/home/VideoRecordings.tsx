@@ -124,7 +124,9 @@ export default function VideoRecordings() {
                   if (!url) return '';
                   let embedUrl = url;
                   
-                  if (url.includes('youtube.com/embed/')) {
+                  if (url.includes('drive.google.com')) {
+                    embedUrl = url.replace(/\/view.*$/, '/preview');
+                  } else if (url.includes('youtube.com/embed/')) {
                     embedUrl = url;
                   } else {
                     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -132,7 +134,6 @@ export default function VideoRecordings() {
                     if (match && match[2].length === 11) {
                       embedUrl = `https://www.youtube.com/embed/${match[2]}`;
                       
-                      // Preserve 't' or 'start' params
                       const urlObj = new URL(url.startsWith('http') ? url : `https://${url}`);
                       const start = urlObj.searchParams.get('t') || urlObj.searchParams.get('start');
                       if (start) {
@@ -143,10 +144,12 @@ export default function VideoRecordings() {
                     }
                   }
                   
-                  if (embedUrl.includes('?')) {
-                    if (!embedUrl.includes('autoplay=1')) embedUrl += '&autoplay=1';
-                  } else {
-                    embedUrl += '?autoplay=1';
+                  if (!url.includes('drive.google.com')) {
+                    if (embedUrl.includes('?')) {
+                      if (!embedUrl.includes('autoplay=1')) embedUrl += '&autoplay=1';
+                    } else {
+                      embedUrl += '?autoplay=1';
+                    }
                   }
                   return embedUrl;
                 })(selectedVideo)}
