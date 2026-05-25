@@ -120,10 +120,39 @@ export default function VideoRecordings() {
               className="relative w-full max-w-5xl aspect-video rounded-3xl overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.5)] border border-white/10"
             >
               <iframe
-                src={selectedVideo.includes('youtube.com') ? selectedVideo : `https://www.youtube.com/embed/${selectedVideo}`}
-                className="w-full h-full"
+                src={(function(url) {
+                  if (!url) return '';
+                  let embedUrl = url;
+                  
+                  if (url.includes('youtube.com/embed/')) {
+                    embedUrl = url;
+                  } else {
+                    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+                    const match = url.match(regExp);
+                    if (match && match[2].length === 11) {
+                      embedUrl = `https://www.youtube.com/embed/${match[2]}`;
+                      
+                      // Preserve 't' or 'start' params
+                      const urlObj = new URL(url.startsWith('http') ? url : `https://${url}`);
+                      const start = urlObj.searchParams.get('t') || urlObj.searchParams.get('start');
+                      if (start) {
+                        embedUrl += `?start=${parseInt(start)}`;
+                      }
+                    } else if (!url.includes('http')) {
+                      embedUrl = `https://www.youtube.com/embed/${url}`;
+                    }
+                  }
+                  
+                  if (embedUrl.includes('?')) {
+                    if (!embedUrl.includes('autoplay=1')) embedUrl += '&autoplay=1';
+                  } else {
+                    embedUrl += '?autoplay=1';
+                  }
+                  return embedUrl;
+                })(selectedVideo)}
+                className="w-full h-full border-0 bg-black"
                 allowFullScreen
-                allow="autoplay"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               />
             </motion.div>
           </motion.div>
