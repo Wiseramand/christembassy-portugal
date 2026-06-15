@@ -61,8 +61,8 @@ export default function VideoRecordings() {
             <h2 className="text-gold text-sm font-bold uppercase tracking-widest mb-3">Reveja a Palavra</h2>
             <h3 className="text-4xl md:text-5xl font-poppins font-bold text-navy">Ensinamentos Recentes</h3>
           </div>
-          <div className="flex items-center gap-6">
-            <div className="hidden md:flex items-center gap-2">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
               <button onClick={scrollLeft} className="p-3 rounded-full border border-gray-200 text-navy hover:bg-gold hover:text-white hover:border-gold transition-colors">
                 <ChevronLeft size={20} />
               </button>
