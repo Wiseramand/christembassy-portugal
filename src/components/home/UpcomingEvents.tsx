@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, ChevronRight, Calendar as CalendarIcon } from 'lucide-react';
+import { MapPin, ChevronRight, ChevronLeft, Calendar as CalendarIcon } from 'lucide-react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 
@@ -16,6 +16,19 @@ const fallbackEvents = [
 export default function UpcomingEvents() {
   const [events, setEvents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const carouselRef = useRef<HTMLDivElement>(null);
+
+  const scrollLeft = () => {
+    if (carouselRef.current) {
+      carouselRef.current.scrollBy({ left: -312, behavior: 'smooth' }); // 280px + 32px gap
+    }
+  };
+
+  const scrollRight = () => {
+    if (carouselRef.current) {
+      carouselRef.current.scrollBy({ left: 312, behavior: 'smooth' });
+    }
+  };
 
   useEffect(() => {
     async function fetchEvents() {
@@ -44,13 +57,23 @@ export default function UpcomingEvents() {
             <h2 className="text-wine text-sm font-bold uppercase tracking-widest mb-3">Junte-se a nós para comunhão</h2>
             <h3 className="text-4xl md:text-5xl font-poppins font-bold text-navy">Próximos Eventos</h3>
           </div>
-          <Link href="/eventos" className="text-navy font-bold flex items-center gap-2 group hover:text-wine transition-colors">
-            Ver Todos os Eventos
-            <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
-          </Link>
+          <div className="flex items-center gap-6">
+            <div className="hidden md:flex items-center gap-2">
+              <button onClick={scrollLeft} className="p-3 rounded-full border border-gray-200 text-navy hover:bg-wine hover:text-white hover:border-wine transition-colors">
+                <ChevronLeft size={20} />
+              </button>
+              <button onClick={scrollRight} className="p-3 rounded-full border border-gray-200 text-navy hover:bg-wine hover:text-white hover:border-wine transition-colors">
+                <ChevronRight size={20} />
+              </button>
+            </div>
+            <Link href="/eventos" className="text-navy font-bold flex items-center gap-2 group hover:text-wine transition-colors">
+              Ver Todos os Eventos
+              <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
         </div>
 
-        <div className="flex overflow-x-auto lg:justify-center gap-8 pb-8 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <div ref={carouselRef} className="flex overflow-x-auto gap-8 pb-8 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {events.map((event, idx) => (
             <motion.div 
               key={event.id}
