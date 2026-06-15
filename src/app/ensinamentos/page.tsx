@@ -2,9 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Play, X, Clock, Heart, PlayCircle, ChevronRight } from 'lucide-react';
+import { Play, X, Heart, PlayCircle } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
-import Link from 'next/link';
 
 const fallbackVideos = [
   { id: '1', title: 'Os 3 Caracteres de Deus', duration: 'Ao Vivo', thumbnail_url: 'https://img.youtube.com/vi/DRkSU-BjHq4/maxresdefault.jpg', url: 'https://www.youtube.com/embed/DRkSU-BjHq4?start=24' },
@@ -13,7 +12,7 @@ const fallbackVideos = [
   { id: '4', title: 'Os fundamentos do Evangelho parte2', duration: 'Ao Vivo', thumbnail_url: 'https://img.youtube.com/vi/M_GQuGjyJuA/maxresdefault.jpg', url: 'https://www.youtube.com/embed/M_GQuGjyJuA?start=1649' },
 ];
 
-export default function VideoRecordings() {
+export default function EnsinamentosPage() {
   const [videos, setVideos] = useState<any[]>([]);
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
 
@@ -22,8 +21,7 @@ export default function VideoRecordings() {
       const { data, error } = await supabase
         .from('videos')
         .select('*')
-        .order('created_at', { ascending: false })
-        .limit(8);
+        .order('created_at', { ascending: false });
 
       if (error) {
         console.error('Erro ao buscar vídeos:', error.message);
@@ -41,32 +39,28 @@ export default function VideoRecordings() {
   }, []);
 
   return (
-    <section className="py-24 bg-off-white">
+    <main className="min-h-screen bg-off-white pt-32 pb-24">
       <div className="container mx-auto px-6">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-          <div>
-            <h2 className="text-gold text-sm font-bold uppercase tracking-widest mb-3">Reveja a Palavra</h2>
-            <h3 className="text-4xl md:text-5xl font-poppins font-bold text-navy">Ensinamentos Recentes</h3>
-          </div>
-          <Link href="/ensinamentos" className="text-navy font-bold flex items-center gap-2 group hover:text-gold transition-colors">
-            Ver Todos os Ensinamentos
-            <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
-          </Link>
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <h1 className="text-gold text-sm font-bold uppercase tracking-widest mb-3">Biblioteca</h1>
+          <h2 className="text-4xl md:text-6xl font-poppins font-bold text-navy mb-6">Todos os Ensinamentos</h2>
+          <p className="text-gray-600 leading-relaxed italic">
+            Explore a nossa coleção completa de ensinamentos para edificar a sua fé e fortalecer a sua caminhada com Deus.
+          </p>
         </div>
 
-        <div className="flex overflow-x-auto lg:justify-center gap-8 pb-8 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {videos.map((video, idx) => (
             <motion.div
               key={video.id}
               initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.1 }}
-              viewport={{ once: true }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.05 }}
               whileHover={{ y: -10 }}
-              className="bg-white rounded-3xl overflow-hidden shadow-lg border border-gray-100 group cursor-pointer w-[320px] snap-start shrink-0"
+              className="bg-white rounded-3xl overflow-hidden shadow-lg border border-gray-100 group cursor-pointer flex flex-col h-full"
               onClick={() => setSelectedVideo(video.url)}
             >
-              <div className="relative aspect-video">
+              <div className="relative aspect-video shrink-0">
                 <img
                   src={video.thumbnail_url}
                   alt={video.title}
@@ -81,15 +75,15 @@ export default function VideoRecordings() {
                   {video.duration}
                 </div>
               </div>
-              <div className="p-8">
+              <div className="p-8 flex flex-col flex-1">
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-1.5 h-1.5 rounded-full bg-wine" />
                   <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{video.category || 'Ensinamento'}</span>
                 </div>
-                <h4 className="text-xl font-poppins font-bold text-navy group-hover:text-gold transition-colors mb-6 line-clamp-2 leading-tight">
+                <h4 className="text-xl font-poppins font-bold text-navy group-hover:text-gold transition-colors mb-6 line-clamp-2 leading-tight flex-1">
                   {video.title}
                 </h4>
-                <div className="flex items-center justify-between pt-4 border-t border-gray-50 text-gray-400 text-xs font-bold uppercase tracking-widest">
+                <div className="flex items-center justify-between pt-4 border-t border-gray-50 text-gray-400 text-xs font-bold uppercase tracking-widest shrink-0">
                   <div className="flex items-center gap-2">
                     <PlayCircle size={16} className="text-wine" />
                     <span>Assistir Agora</span>
@@ -102,7 +96,6 @@ export default function VideoRecordings() {
         </div>
       </div>
 
-      {/* Video Modal Player */}
       <AnimatePresence>
         {selectedVideo && (
           <motion.div
@@ -165,6 +158,6 @@ export default function VideoRecordings() {
           </motion.div>
         )}
       </AnimatePresence>
-    </section>
+    </main>
   );
 }

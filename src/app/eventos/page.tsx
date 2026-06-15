@@ -2,8 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, ChevronRight, Calendar as CalendarIcon } from 'lucide-react';
-import Link from 'next/link';
+import { MapPin, Calendar as CalendarIcon } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 
 const fallbackEvents = [
@@ -13,7 +12,7 @@ const fallbackEvents = [
   { id: '4', title: 'Culto de Quarta Feira', date: '2026-05-13T19:00:00', location: 'Sede Local', image_url: '/images/services.jpg' },
 ];
 
-export default function UpcomingEvents() {
+export default function EventosPage() {
   const [events, setEvents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -22,9 +21,7 @@ export default function UpcomingEvents() {
       const { data, error } = await supabase
         .from('events')
         .select('*')
-        .gte('date', new Date().toISOString())
-        .order('date', { ascending: true })
-        .limit(8);
+        .order('date', { ascending: true });
 
       if (data && data.length > 0 && !error) {
         setEvents(data);
@@ -37,30 +34,26 @@ export default function UpcomingEvents() {
   }, []);
 
   return (
-    <section className="py-24 bg-white">
+    <main className="min-h-screen bg-white pt-32 pb-24">
       <div className="container mx-auto px-6">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-          <div>
-            <h2 className="text-wine text-sm font-bold uppercase tracking-widest mb-3">Junte-se a nós para comunhão</h2>
-            <h3 className="text-4xl md:text-5xl font-poppins font-bold text-navy">Próximos Eventos</h3>
-          </div>
-          <Link href="/eventos" className="text-navy font-bold flex items-center gap-2 group hover:text-wine transition-colors">
-            Ver Todos os Eventos
-            <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
-          </Link>
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <h1 className="text-wine text-sm font-bold uppercase tracking-widest mb-3">Calendário</h1>
+          <h2 className="text-4xl md:text-6xl font-poppins font-bold text-navy mb-6">Todos os Eventos</h2>
+          <p className="text-gray-600 leading-relaxed italic">
+            Fique por dentro de todos os nossos encontros, cultos e conferências planeados para si.
+          </p>
         </div>
 
-        <div className="flex overflow-x-auto lg:justify-center gap-8 pb-8 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {events.map((event, idx) => (
             <motion.div 
               key={event.id}
               initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.1 }}
-              viewport={{ once: true }}
-              className="group cursor-pointer w-[280px] snap-start shrink-0"
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.05 }}
+              className="group cursor-pointer flex flex-col h-full"
             >
-              <div className="relative overflow-hidden rounded-3xl mb-6 aspect-square shadow-lg group-hover:shadow-2xl transition-all duration-500">
+              <div className="relative overflow-hidden rounded-3xl mb-6 aspect-square shadow-lg group-hover:shadow-2xl transition-all duration-500 shrink-0">
                 <img 
                   src={event.image_url} 
                   alt={event.title}
@@ -87,15 +80,17 @@ export default function UpcomingEvents() {
                   </div>
                 </div>
               </div>
-              <h4 className="text-2xl font-poppins font-bold text-navy group-hover:text-gold transition-colors mb-2">{event.title}</h4>
-              <div className="flex items-center gap-2 text-gray-400 text-sm font-medium">
-                <MapPin size={16} className="text-wine" />
-                <span>{event.location}</span>
+              <div className="flex-1 flex flex-col">
+                <h4 className="text-2xl font-poppins font-bold text-navy group-hover:text-gold transition-colors mb-2 flex-1">{event.title}</h4>
+                <div className="flex items-center gap-2 text-gray-400 text-sm font-medium shrink-0">
+                  <MapPin size={16} className="text-wine" />
+                  <span>{event.location}</span>
+                </div>
               </div>
             </motion.div>
           ))}
         </div>
       </div>
-    </section>
+    </main>
   );
 }
